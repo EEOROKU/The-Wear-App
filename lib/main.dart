@@ -104,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ElevatedButton(
-              child: Text('Sign In'),
+              child: const Text('Sign In'),
               onPressed: (){},
             ),
             const Text(
@@ -114,11 +114,11 @@ class _MyHomePageState extends State<MyHomePage> {
               'Or sign up with',style: TextStyle(fontSize: 15.0, color: Colors.grey),
             ),
             ElevatedButton(
-              child: Text('Continue with Google'),
+              child: const Text('Continue with Google'),
               onPressed: (){},
             ),
             ElevatedButton(
-              child: Text('Continue with Email'),
+              child: const Text('Continue with Email'),
               onPressed: (){},
             ),
           ],
