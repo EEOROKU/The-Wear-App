@@ -1,39 +1,58 @@
+import 'package:closet_app/screens/login_screen.dart';
+import 'package:closet_app/screens/signup_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'WEAR',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'WEAR'),
+      home: LoginScreen(), // Set LoginScreen as the home route
+      routes: {
+        '/login': (context) => LoginScreen(),
+        '/signup': (context) => SignupScreen(),
+      },
     );
   }
+}
+
+// This widget is the root of your application.
+@override
+Widget build(BuildContext context) {
+  return MaterialApp(
+    title: 'WEAR',
+    theme: ThemeData(
+      // This is the theme of your application.
+      //
+      // TRY THIS: Try running your application with "flutter run". You'll see
+      // the application has a purple toolbar. Then, without quitting the app,
+      // try changing the seedColor in the colorScheme below to Colors.green
+      // and then invoke "hot reload" (save your changes or press the "hot
+      // reload" button in a Flutter-supported IDE, or press "r" if you used
+      // the command line to start the app).
+      //
+      // Notice that the counter didn't reset back to zero; the application
+      // state is not lost during the reload. To reset the state, use hot
+      // restart instead.
+      //
+      // This works for code too, not just values: Most code changes can be
+      // tested with just a hot reload.
+      colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      useMaterial3: true,
+    ),
+    home: const MyHomePage(title: 'WEAR'),
+  );
 }
 
 class MyHomePage extends StatefulWidget {
@@ -55,7 +74,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -65,7 +83,6 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
@@ -86,10 +103,14 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'WEAR',style: TextStyle(fontSize: 40.0,),
+              'WEAR',
+              style: TextStyle(
+                fontSize: 40.0,
+              ),
             ),
             const Text(
-              'Welcome to WEAR',style: TextStyle(fontSize: 15.0, color: Colors.grey),
+              'Welcome to WEAR',
+              style: TextStyle(fontSize: 15.0, color: Colors.grey),
             ),
             const TextField(
               decoration: InputDecoration(
@@ -105,21 +126,23 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               child: const Text('Sign In'),
-              onPressed: (){},
+              onPressed: () {},
             ),
             const Text(
-              'Forgot Password',style: TextStyle(fontSize: 15.0),
+              'Forgot Password',
+              style: TextStyle(fontSize: 15.0),
             ),
             const Text(
-              'Or sign up with',style: TextStyle(fontSize: 15.0, color: Colors.grey),
+              'Or sign up with',
+              style: TextStyle(fontSize: 15.0, color: Colors.grey),
             ),
             ElevatedButton(
               child: const Text('Continue with Google'),
-              onPressed: (){},
+              onPressed: () {},
             ),
             ElevatedButton(
               child: const Text('Continue with Email'),
-              onPressed: (){},
+              onPressed: () {},
             ),
           ],
         ),
