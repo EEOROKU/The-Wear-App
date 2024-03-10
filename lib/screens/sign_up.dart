@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:closet_app/widgets/widgets.dart';
 import 'package:closet_app/utils/constants.dart';
+import "package:closet_app/services/fire_auth.dart"; // Import the AuthService
+import 'package:closet_app/screens/screens.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -14,6 +16,35 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController userPass = TextEditingController();
   TextEditingController userEmail = TextEditingController();
   TextEditingController userPh = TextEditingController();
+
+  final AuthService _authService = AuthService(); // Initialize the AuthService
+
+  Future<void> _signUp() async {
+    try {
+      await _authService.signUpWithEmailAndPassword(userEmail.text, userPass.text);
+      // SignUp successful, navigate to HomeScreen or another page
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+    } catch (error) {
+      // SignUp failed, show error message
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Sign Up Failed'),
+            content: Text(error.toString()),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +92,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               const SpaceVH(height: 80.0),
               Mainbutton(
-                onTap: () {},
+                onTap: _signUp, // Call _signUp method when button is tapped
                 text: 'Sign Up',
                 btnColor: blueButton,
               ),

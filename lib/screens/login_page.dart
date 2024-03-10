@@ -1,7 +1,8 @@
-import 'package:closet_app/screens/screens.dart'; // Importing screens
-import 'package:closet_app/widgets/widgets.dart'; // Importing widgets
 import 'package:flutter/material.dart';
-import 'package:closet_app/utils/constants.dart'; // Importing constants
+import 'package:closet_app/widgets/widgets.dart';
+import 'package:closet_app/utils/constants.dart';
+import "package:closet_app/services/fire_auth.dart"; // Import the AuthService
+import 'package:closet_app/screens/screens.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,89 +15,120 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController userName = TextEditingController();
   TextEditingController userPass = TextEditingController();
 
+  final AuthService _authService = AuthService(); // Initialize the AuthService
+
+  // Method to handle sign-in
+  Future<void> _signIn() async {
+    try {
+      // Call the sign-in method from AuthService
+      await _authService.signInWithEmailAndPassword(userName.text, userPass.text);
+      // Navigate to HomeScreen upon successful sign-in
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+    } catch (error) {
+      // Display an error dialog if sign-in fails
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Sign In Failed'),
+            content: Text(error.toString()),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: blackBG, // Set background color
+      backgroundColor: blackBG,
       body: Padding(
         padding: const EdgeInsets.only(top: 50.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SpaceVH(height: 50.0), // Vertical space
+              const SpaceVH(height: 50.0),
               const Text(
-                'Welcome Back!', // Display welcome message
-                style: headline1, // Apply headline1 style
+                'Welcome Back!',
+                style: headline1,
               ),
-              const SpaceVH(height: 10.0), // Vertical space
+              const SpaceVH(height: 10.0),
               const Text(
-                'Please sign in to your account', // Display sign-in message
-                style: headline3, // Apply headline3 style
+                'Please sign in to your account',
+                style: headline3,
               ),
-              const SpaceVH(height: 60.0), // Vertical space
+              const SpaceVH(height: 60.0),
               textFild(
                 controller: userName,
-                image: 'user.svg', // Display user icon
-                hintTxt: 'Username', // Display username hint
+                image: 'user.svg',
+                hintTxt: 'Username',
               ),
               textFild(
                 controller: userPass,
-                image: 'hide.svg', // Display password icon
-                isObs: true, // Set password text field as obscured
-                hintTxt: 'Password', // Display password hint
+                image: 'hide.svg',
+                isObs: true,
+                hintTxt: 'Password',
               ),
-              const SpaceVH(height: 10.0), // Vertical space
+              const SpaceVH(height: 10.0),
               Align(
                 alignment: Alignment.centerRight,
                 child: Padding(
                   padding: const EdgeInsets.only(right: 20.0),
                   child: TextButton(
-                    onPressed: () {}, // Forgot password button functionality
+                    onPressed: () {},
                     child: const Text(
-                      'Forgot Password?', // Display forgot password option
-                      style: headline3, // Apply headline3 style
+                      'Forgot Password?',
+                      style: headline3,
                     ),
                   ),
                 ),
               ),
-              const SpaceVH(height: 100.0), // Vertical space
+              const SpaceVH(height: 100.0),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Column(
                   children: [
                     Mainbutton(
-                      onTap: () {}, // Sign in button functionality
-                      text: 'Sign in', // Display sign in button
-                      btnColor: blueButton, // Apply blue button color
+                      onTap: _signIn, // Call _signIn method when button is tapped
+                      text: 'Sign in',
+                      btnColor: blueButton,
                     ),
-                    const SpaceVH(height: 20.0), // Vertical space
+                    const SpaceVH(height: 20.0),
                     Mainbutton(
-                      onTap: () {}, // Sign in with Google button functionality
-                      text: 'Sign in with google', // Display Google sign-in button
-                      image: 'google.png', // Display Google icon
-                      btnColor: white, // Apply white button color
-                      txtColor: blackBG, // Apply black text color
+                      onTap: () {},
+                      text: 'Sign in with google',
+                      image: 'google.png',
+                      btnColor: white,
+                      txtColor: blackBG,
                     ),
-                    const SpaceVH(height: 20.0), // Vertical space
+                    const SpaceVH(height: 20.0),
                     TextButton(
                       onPressed: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (builder) => const SignUpPage())); // Navigate to SignUpPage
+                          context,
+                          MaterialPageRoute(builder: (builder) => const SignUpPage()),
+                        );
                       },
                       child: RichText(
                         text: TextSpan(children: [
                           TextSpan(
-                            text: 'Don\' have an account? ', // Display sign-up message
+                            text: 'Don\' have an account? ',
                             style: headline.copyWith(
-                              fontSize: 14.0, // Apply custom font size
+                              fontSize: 14.0,
                             ),
                           ),
                           TextSpan(
-                            text: ' Sign Up', // Display Sign Up link
+                            text: ' Sign Up',
                             style: headlineDot.copyWith(
-                              fontSize: 14.0, // Apply custom font size
+                              fontSize: 14.0,
                             ),
                           ),
                         ]),

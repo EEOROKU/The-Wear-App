@@ -3,14 +3,14 @@ import 'package:closet_app/screens/screens.dart';
 import 'package:closet_app/widgets/widgets.dart';
 import 'package:closet_app/utils/constants.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class LandingPage extends StatefulWidget {
+  const LandingPage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _LandingPageState createState() => _LandingPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     // Get the height of the device screen
@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
               Colors.black.withOpacity(0.5), // Adjusted opacity for smoother blend
               Colors.grey.withOpacity(0.2),
             ],
-            stops: [0.0, 0.55, 1.0], // Adjusted gradient stops
+            stops: const [0.0, 0.55, 1.0], // Adjusted gradient stops
             begin: Alignment.topCenter, // Gradient starts from the top
             end: Alignment.bottomCenter, // Gradient ends at the bottom
           ),
