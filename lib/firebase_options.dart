@@ -54,6 +54,7 @@ class DefaultFirebaseOptions {
     appId: '1:598588219722:android:eef4b057cde93d386de1b3',
     messagingSenderId: '598588219722',
     projectId: 'team-eagles---wear-app',
+    databaseURL: 'https://team-eagles---wear-app-default-rtdb.firebaseio.com',
     storageBucket: 'team-eagles---wear-app.appspot.com',
   );
 
@@ -62,6 +63,7 @@ class DefaultFirebaseOptions {
     appId: '1:598588219722:ios:b57a6f532752578c6de1b3',
     messagingSenderId: '598588219722',
     projectId: 'team-eagles---wear-app',
+    databaseURL: 'https://team-eagles---wear-app-default-rtdb.firebaseio.com',
     storageBucket: 'team-eagles---wear-app.appspot.com',
     iosBundleId: 'com.example.closetApp',
   );
