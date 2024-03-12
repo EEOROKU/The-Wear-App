@@ -4,7 +4,7 @@ import 'package:closet_app/widgets/widgets.dart';
 import 'package:closet_app/utils/constants.dart';
 
 class LandingPage extends StatefulWidget {
-  const LandingPage({super.key});
+  const LandingPage({Key? key}) : super(key: key);
 
   @override
   _LandingPageState createState() => _LandingPageState();
@@ -13,57 +13,99 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
-    // Get the height of the device screen
     final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.transparent, // Make background transparent
+      backgroundColor: Colors.transparent,
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
               Colors.black,
-              Colors.black.withOpacity(0.5), // Adjusted opacity for smoother blend
+              Colors.black.withOpacity(0.5),
               Colors.grey.withOpacity(0.2),
             ],
-            stops: const [0.0, 0.55, 1.0], // Adjusted gradient stops
-            begin: Alignment.topCenter, // Gradient starts from the top
-            end: Alignment.bottomCenter, // Gradient ends at the bottom
+            stops: const [0.0, 0.55, 1.0],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
-        child: Stack(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'WEAR',
-                    style: headline.copyWith(fontSize: 40.0),
-                  ),
-                  const SizedBox(height: 20.0),
-                  Text(
-                    """    Revolutionize your wardrobe with Wear! 
-     Digitize and discover endless outfit possibilities. 
-      Your fashion journey starts here.""",
-                    textAlign: TextAlign.center,
-                    style: headline2.copyWith(fontSize: 18.0),
-                  ),
-                ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 0.0),
+              child: Text(
+                'WEAR.',
+                style: headline.copyWith(fontSize: 40.0),
               ),
             ),
-            Positioned(
-              bottom: 40.0,
-              left: 0,
-              right: 0,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Text(
+                'Create your own digital closet',
+                style: headline.copyWith(fontSize: 30.0),
+              ),
+            ),
+            SizedBox(height: 15.0),
+            Expanded(
               child: Center(
-                child: Mainbutton(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (builder) => const LoginPage())); // Navigate to LoginPage on button press
-                  },
-                  btnColor: blueButton,
-                  text: 'Get Started',
+                child: Container(
+                  width: width * 0.9, // 90% of the screen width
+                  child: AspectRatio(
+                    aspectRatio: 10 / 15, // Custom aspect ratio
+                    child: Image.asset(
+                      'assets/image/page2.png',
+                      fit: BoxFit.fill, // Stretch the image to fit the container
+                    ),
+                  ),
                 ),
+              ),
+            ),
+            SizedBox(height: 20.0), // Adjusted SizedBox height
+            Padding(
+              padding: const EdgeInsets.only(top: 0),
+              child: Column(
+                children: [
+                  Mainbutton(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (builder) => const LoginPage()),
+                      );
+                    },
+                    btnColor: blueButton,
+                    text: 'Get Started',
+                  ),
+
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const LoginPage()),
+                      );
+                    },
+                    child: TextButton(
+                      onPressed: () {},
+                      child: RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                            text: 'Have an account? ',
+                            style: headline.copyWith(
+                              fontSize: 14.0,
+                            ),
+                          ),
+                          TextSpan(
+                            text: ' Sign In',
+                            style: headlineDot.copyWith(
+                              fontSize: 14.0,
+                            ),
+                          ),
+                        ]),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

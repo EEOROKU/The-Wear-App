@@ -1,3 +1,4 @@
+import 'package:closet_app/helper/helper_function.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,19 +10,42 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,); // Initialize Firebase
   runApp(const MyApp());
 }
-
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+
+  bool _isSignedIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getUserLoggedInStatus();
+  }
+
+  getUserLoggedInStatus() async {
+    await HelperFunctions.getUserLoggedInStatus().then((value) {
+      if (value != null) {
+        setState(() {
+          _isSignedIn = value;
+        });
+      }
+    });
+  }
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Closet App',
+      title: 'WEAR App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       // Set SplashPage as initial route
-      initialRoute: '/',
+      initialRoute: _isSignedIn ? '/home' : '/',
       routes: {
         '/': (context) => const LandingPage(), // Route to SplashScreen
         '/login': (context) => const LoginPage(), // Route to LoginPage
@@ -35,7 +59,7 @@ class MyApp extends StatelessWidget {
 
 
 class AuthenticationWrapper extends StatelessWidget {
-  const AuthenticationWrapper({Key? key}) : super(key: key);
+  const AuthenticationWrapper({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -10,6 +10,7 @@ Widget textFild({
   TextInputType? keyBordType,
 }) {
   return Container(
+
     height: 70.0,
     padding: const EdgeInsets.symmetric(horizontal: 30.0),
     margin: const EdgeInsets.symmetric(
@@ -29,6 +30,11 @@ Widget textFild({
             textAlignVertical: TextAlignVertical.center,
             obscureText: isObs,
             keyboardType: keyBordType,
+            onChanged: (value) {
+              // This onChanged callback updates the text in the controller
+              // whenever the user types something
+              controller.text = value;
+            },
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: hintTxt,
