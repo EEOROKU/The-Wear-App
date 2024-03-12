@@ -39,6 +39,8 @@ dependencies:
   firebase_database: ^10.4.9
   shared_preferences: ^2.2.2
   cloud_firestore: ^4.15.8
+  mockito: ^5.4.4
+  firebase_auth_mocks: ^0.13.0
 
 dev_dependencies:
   flutter_test:
