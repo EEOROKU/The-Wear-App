@@ -7,7 +7,7 @@ void main() {
   group('LoginPage Widget Tests', () {
     testWidgets('LoginPage UI Test', (WidgetTester tester) async {
       // Pump the LoginPage widget into the test environment
-      await tester.pumpWidget(MaterialApp(home: LoginPage()));
+      await tester.pumpWidget(const MaterialApp(home: LoginPage()));
 
       // Verify the presence of specific text widgets and UI elements
       expect(find.text('Welcome Back!'), findsOneWidget);
@@ -21,7 +21,7 @@ void main() {
   group('SignUpPage Widget Tests', () {
     testWidgets('SignUpPage UI Test', (WidgetTester tester) async {
       // Pump the SignUpPage widget into the test environment
-      await tester.pumpWidget(MaterialApp(home: SignUpPage()));
+      await tester.pumpWidget(const MaterialApp(home: SignUpPage()));
 
       // Verify the presence of specific text widgets and UI elements
       expect(find.text('Create new account'), findsOneWidget);
@@ -34,7 +34,7 @@ void main() {
   group('HomePage Widget Tests', () {
     testWidgets('HomePage UI Test', (WidgetTester tester) async {
       // Pump the HomePage widget into the test environment
-      await tester.pumpWidget(MaterialApp(home: HomePage()));
+      await tester.pumpWidget(const MaterialApp(home: LandingPage()));
 
       // Verify the presence of specific text widgets and UI elements
       expect(find.text('WEAR'), findsOneWidget);

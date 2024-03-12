@@ -1,31 +1,81 @@
-import 'package:closet_app/screens/screens.dart';
-import 'package:closet_app/utils/style.dart';
+import 'package:closet_app/helper/helper_function.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:closet_app/screens/screens.dart';
+import 'firebase_options.dart';
 
-
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,); // Initialize Firebase
   runApp(const MyApp());
 }
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+
+  bool _isSignedIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getUserLoggedInStatus();
+  }
+
+  getUserLoggedInStatus() async {
+    await HelperFunctions.getUserLoggedInStatus().then((value) {
+      if (value != null) {
+        setState(() {
+          _isSignedIn = value;
+        });
+      }
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'WEAR App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      // Set SplashPage as initial route
+      initialRoute: _isSignedIn ? '/home' : '/',
+      routes: {
+        '/': (context) => const LandingPage(), // Route to SplashScreen
+        '/login': (context) => const LoginPage(), // Route to LoginPage
+        '/signup': (context) => const SignUpPage(), // Route to SignUpPage
+        '/home': (context) => const AuthenticationWrapper(), // Route to AuthenticationWrapper
+      },
+    );
+  }
+}
+
+
+
+class AuthenticationWrapper extends StatelessWidget {
+  const AuthenticationWrapper({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus &&
-            currentFocus.focusedChild != null) {
-          FocusManager.instance.primaryFocus?.unfocus();
+    return StreamBuilder(
+      stream: FirebaseAuth.instance.authStateChanges(), // Listen to authentication state changes
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const LandingPage(); // Show SplashScreen while waiting for auth state
+        } else {
+          if (snapshot.hasData) {
+            return const HomeScreen(); // If user is authenticated, show HomeScreen
+          } else {
+            return const LoginPage(); // If user is not authenticated, show LoginPage
+          }
         }
       },
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        debugShowCheckedModeBanner: false,
-        theme: Stlyes.themeData(),
-        home: const HomePage(),
-      ),
     );
   }
 }

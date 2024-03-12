@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "598588219722",
+    "firebase_url": "https://team-eagles---wear-app-default-rtdb.firebaseio.com",
+    "project_id": "team-eagles---wear-app",
+    "storage_bucket": "team-eagles---wear-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:598588219722:android:eef4b057cde93d386de1b3",
+        "android_client_info": {
+          "package_name": "com.example.closet_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADOUh7Q6JKhs3EJRVaJYMuDP9bGOuTjWU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
