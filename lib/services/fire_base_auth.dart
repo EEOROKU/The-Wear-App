@@ -25,43 +25,10 @@ class AuthService {
 
   FirebaseAuth get firebaseAuthInstance => _auth;
 
-//* Coould figure out how to deal with unique username validation , trying to meet deadline*
-
-  // Future<String?> _getUserEmailByUsername(String username) async {
-  //   try {
-  //     // Query Firestore to find the user document with the provided username
-  //     QuerySnapshot querySnapshot = await _firestore
-  //         .collection('users')
-  //         .where('username', isEqualTo: username)
-  //         .get();
-  //
-  //     if (querySnapshot.docs.isNotEmpty) {
-  //       // If user document with the username exists, return the email
-  //       return querySnapshot.docs.first.get('email');
-  //     } else {
-  //       // If user document with the username does not exist, return null
-  //       return null;
-  //     }
-  //   } catch (error) {
-  //     // Handle any errors that occur during the process
-  //     print('Error getting user email by username: $error');
-  //     return null;
-  //   }
-  // }
 
   Future<User?> signInWithEmailAndPassword(String email, String password) async {
     try {
       String signInEmail = email;
-
-      // Will try to implement in future
-      // if (!email.contains('@')) {
-      //   // If email does not contain '@', assume it's a username
-      //   String? userEmail = await _getUserEmailByUsername(email);
-      //   if (userEmail == null) {
-      //     throw 'Username not found.';
-      //   }
-      //   signInEmail = userEmail;
-      // }
 
       UserCredential credential = await _auth.signInWithEmailAndPassword(
         email: signInEmail,
@@ -69,10 +36,12 @@ class AuthService {
       );
       User? user = credential.user;
 
+
       // saving the values to our shared preferences
       await HelperFunctions.saveUserLoggedInStatus(true);
       await HelperFunctions.saveUserEmailSF(signInEmail);
       //await HelperFunctions.saveUserNameSF(snapshot.docs[0]['userName']);
+
       return user;
     } on FirebaseAuthException catch (e) {
       // Handle specific Firebase authentication exceptions
