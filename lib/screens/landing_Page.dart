@@ -82,7 +82,7 @@ class _LandingPageState extends State<LandingPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const LoginPage()),
+                        MaterialPageRoute(builder: (context) =>  LoginPage()),
                       );
                     },
                     child: TextButton(
