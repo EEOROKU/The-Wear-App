@@ -3,7 +3,7 @@ import 'package:closet_app/widgets/widgets.dart';
 import 'package:closet_app/utils/constants.dart';
 import "package:closet_app/services/fire_auth.dart";
 import 'package:closet_app/screens/screens.dart';
-
+import 'package:closet_app/helper/helper_function.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,74 +19,32 @@ class _LoginPageState extends State<LoginPage> {
 
   final AuthService _authService = AuthService(); // Initialize the AuthService
 
-  bool _validateInputs() {
-    if (userEmail.text.trim().isEmpty || userPass.text.trim().isEmpty) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Validation Error'),
-            content: const Text('Please enter both email and password.'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-      return false;
-    } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(userEmail.text.trim())) {
-      // Check if email is valid using regex
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Validation Error'),
-            content: const Text('Please enter a valid email address.'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-      return false;
-    } else if (userPass.text.length < 5) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Validation Error'),
-            content: const Text('Password must be at least 5 characters long.'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-      return false;
-    }
 
-    return true;
-  }
 
 
   // Method to handle sign-in
   Future<void> _signIn() async {
-    if (!_validateInputs()) {
+    String? errorMessage = HelperFunctions.validateInputs(userEmail, userPass);
+
+    if (errorMessage != null) {
+      // Show error message returned from validation function
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('SignIn Failed'),
+            content: Text(errorMessage),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
       return; // Don't proceed with sign-in if inputs are not valid
     }
     try {
@@ -142,10 +100,8 @@ class _LoginPageState extends State<LoginPage> {
                 hintTxt: 'Email',
 
               ),
-              textFild(
+              PasswordTextField(
                 controller: userPass,
-                image: 'hide.svg',
-                isObs: true,
                 hintTxt: 'Password',
               ),
               const SpaceVH(height: 10.0),

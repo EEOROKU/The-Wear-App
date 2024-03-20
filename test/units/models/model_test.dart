@@ -18,7 +18,7 @@ void main() {
 
       // Assert
       expect(userModel.uid, 'user123');
-      expect(userModel.email, 'test@example.com');
+      expect(userModel.userEmail, 'test@example.com');
       expect(userModel.userName, 'test_user');
     });
 
@@ -26,7 +26,7 @@ void main() {
       // Arrange
       final userModel = UserModel(
         uid: 'user123',
-        email: 'test@example.com',
+        userEmail: 'test@example.com',
         userName: 'test_user',
       );
 

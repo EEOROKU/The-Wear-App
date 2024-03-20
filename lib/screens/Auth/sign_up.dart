@@ -1,3 +1,4 @@
+import 'package:closet_app/helper/helper_function.dart';
 import 'package:flutter/material.dart';
 import 'package:closet_app/widgets/widgets.dart';
 import 'package:closet_app/utils/constants.dart';
@@ -20,8 +21,31 @@ class _SignUpPageState extends State<SignUpPage> {
 
   final AuthService _authService = AuthService(); // Initialize the AuthService
 
-  Future<void> _signUp() async {
 
+  Future<void> _signUp() async {
+    String? errorMessage = HelperFunctions.validateInputs(userEmail, userPass);
+
+    if (errorMessage != null) {
+      // Show error message returned from validation function
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('SignUp Failed'),
+            content: Text(errorMessage),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return; // Don't proceed with sign-in if inputs are not valid
+    }
     if (_formKey.currentState!.validate()) {
       try {
         await _authService.signUpWithEmailAndPassword(
@@ -74,6 +98,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   style: headline3,
                 ),
                 const SpaceVH(height: 60.0),
+
                 textFild(
                   controller: userName,
                   image: 'user.svg',
@@ -87,12 +112,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   hintTxt: 'Email Address',
 
                 ),
-                textFild(
+                PasswordTextField(
                   controller: userPass,
-                  isObs: true,
-                  image: 'hide.svg',
                   hintTxt: 'Password',
-
                 ),
                 const SpaceVH(height: 80.0),
                 Mainbutton(
@@ -103,7 +125,10 @@ class _SignUpPageState extends State<SignUpPage> {
                 const SpaceVH(height: 20.0),
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>  LoginPage()),
+                    );
                   },
                   child: RichText(
                     text: TextSpan(children: [

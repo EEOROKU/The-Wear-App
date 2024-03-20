@@ -1,58 +1,28 @@
-import 'package:closet_app/model/model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:closet_app/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import '../helper/helper_function.dart';
+
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  postDetailsToFirestore(String userName) async {
-    User? user = _auth.currentUser;
-    UserModel userModel = UserModel();
-    // writing all the values
-    userModel.email = user!.email;
-    userModel.uid = user.uid;
-    userModel.userName = userName;
-
-    await _firestore
-        .collection("users")
-        .doc(user.uid)
-        .set(userModel.toMap());
-  }
-
-  FirebaseAuth get firebaseAuthInstance => _auth;
-
-
   Future<User?> signInWithEmailAndPassword(String email, String password) async {
     try {
-      String signInEmail = email;
-
       UserCredential credential = await _auth.signInWithEmailAndPassword(
-        email: signInEmail,
+        email: email,
         password: password,
       );
       User? user = credential.user;
-
-
-      // saving the values to our shared preferences
-      await HelperFunctions.saveUserLoggedInStatus(true);
-      await HelperFunctions.saveUserEmailSF(signInEmail);
-      //await HelperFunctions.saveUserNameSF(snapshot.docs[0]['userName']);
-
+      await DatabaseService(uid: user!.uid).gettingUserData(email);
       return user;
+
     } on FirebaseAuthException catch (e) {
       // Handle specific Firebase authentication exceptions
-      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
-        throw 'Invalid email or password.';
-      } else {
-        throw 'An error occurred: ${errorContext(e.code)}';
-      }
+      String error = errorContext(e);
+      throw error;
     } catch (e) {
       // Handle other exceptions
-      throw 'An unexpected error occurred.';
+      throw 'An unexpected error occurred: ${e.toString()}';
     }
   }
 
@@ -64,31 +34,22 @@ class AuthService {
         password: password,
       );
       User? user = credential.user;
-      postDetailsToFirestore(userName);
 
-      // saving the values to our shared preferences
-      await HelperFunctions.saveUserLoggedInStatus(true);
-      await HelperFunctions.saveUserEmailSF(email);
-      await HelperFunctions.saveUserNameSF(userName);
-
+      await DatabaseService(uid: user?.uid).savingUserData(userName, email);
 
       return user;
     }
 
     on FirebaseAuthException catch (e) {
-
       // Handle specific Firebase authentication exceptions
-      if (e.code == 'email-already-in-use') {
-        throw 'The email address is already in use.';
-      } else {
-        throw 'An error occurred: ${errorContext(e.code)}';
-      }
+      String error = errorContext(e);
+      throw error;
     } catch (e) {
       // Handle other exceptions
-      throw 'An unexpected error occurred.';
+      throw 'An unexpected error occurred: ${e.toString()}';
     }
-
   }
+
 
   Future signOut() async {
     try {
@@ -101,7 +62,10 @@ class AuthService {
     }
   }
 
-  String errorContext(String error){
+
+
+  // figure out how to handle message
+  String errorContext(FirebaseAuthException error){
     String errorMessage ="";
     switch (error) {
       case "invalid-email":
@@ -123,7 +87,7 @@ class AuthService {
         errorMessage = "Signing in with Email and Password is not enabled.";
         break;
       default:
-        errorMessage = "An undefined Error happened.";
+        errorMessage = "An undefined Error happene.";
     }
     return errorMessage;
   }

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HelperFunctions {
@@ -39,4 +40,20 @@ class HelperFunctions {
     SharedPreferences sf = await SharedPreferences.getInstance();
     return sf.getString(userNameKey);
   }
+
+
+  static String? validateInputs(TextEditingController userEmail,TextEditingController userPass) {
+    if (userEmail.text.trim().isEmpty || userPass.text.trim().isEmpty) {
+      return 'Please enter both email and password.';
+    } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(userEmail.text.trim())) {
+      // Check if email is valid using regex
+      return 'Please enter a valid email address.';
+    } else if (userPass.text.length < 6) {
+
+      return 'Password must be at least 6 characters long.';
+    }
+
+    return null;
+  }
+
 }

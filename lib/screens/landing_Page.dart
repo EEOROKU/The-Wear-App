@@ -71,22 +71,24 @@ class _LandingPageState extends State<LandingPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (builder) => const LoginPage()),
+                        MaterialPageRoute(builder: (builder) => const SignUpPage()),
                       );
                     },
                     btnColor: blueButton,
                     text: 'Get Started',
                   ),
+                   const SpaceVH(height: 20.0),
+                   TextButton(
+                     onPressed: () {
+                       Navigator.push(context, MaterialPageRoute(builder: (builder) => const SignUpPage()),);},
 
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>  LoginPage()),
-                      );
-                    },
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: ()  {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>  LoginPage()),
+                        );
+                      },
                       child: RichText(
                         text: TextSpan(children: [
                           TextSpan(
@@ -104,7 +106,7 @@ class _LandingPageState extends State<LandingPage> {
                         ]),
                       ),
                     ),
-                  ),
+      ),
                 ],
               ),
             ),
