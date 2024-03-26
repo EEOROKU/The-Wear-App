@@ -1,10 +1,11 @@
+import 'package:closet_app/model/model.dart';
 import 'package:closet_app/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../helper/helper_function.dart';
 
-
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
 
   Future<User?> signInWithEmailAndPassword(String email, String password) async {
     try {
@@ -13,9 +14,8 @@ class AuthService {
         password: password,
       );
       User? user = credential.user;
-      await DatabaseService(uid: user!.uid).gettingUserData(email);
+      await DatabaseService(uid: user!.uid).gettingUserData(user.uid);
       return user;
-
     } on FirebaseAuthException catch (e) {
       // Handle specific Firebase authentication exceptions
       String error = errorContext(e);
@@ -26,6 +26,10 @@ class AuthService {
     }
   }
 
+  Future<void> updateDisplayName(String displayName) async {
+    var user = _auth.currentUser;
+    user?.updateDisplayName(displayName);
+  }
 
   Future<User?> signUpWithEmailAndPassword(String email, String password, String userName) async {
     try {
@@ -35,12 +39,10 @@ class AuthService {
       );
       User? user = credential.user;
 
-      await DatabaseService(uid: user?.uid).savingUserData(userName, email);
+      await DatabaseService(uid: user?.uid).savingUserData(userName, email, "");
 
       return user;
-    }
-
-    on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e) {
       // Handle specific Firebase authentication exceptions
       String error = errorContext(e);
       throw error;
@@ -50,6 +52,34 @@ class AuthService {
     }
   }
 
+  // Get current user
+  Future<UserModel> getCurrentUser() async {
+    var user = _auth.currentUser;
+    if (user != null) {
+      UserModel usermodel = await DatabaseService(uid: user.uid).gettingUserData(user.uid);
+      return usermodel;
+    } else {
+      throw Exception("User is not authenticated");
+    }
+  }
+
+  Future<bool> validatePassword(String email, String password) async {
+    var user = _auth.currentUser;
+
+    var authCredentials = EmailAuthProvider.credential(email: email, password: password);
+    try {
+      var authResult = await user?.reauthenticateWithCredential(authCredentials);
+      return authResult?.user != null;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<void> updatePassword(String password) async {
+    var user = _auth.currentUser;
+    user?.updatePassword(password);
+  }
 
   Future signOut() async {
     try {
@@ -62,11 +92,9 @@ class AuthService {
     }
   }
 
-
-
   // figure out how to handle message
-  String errorContext(FirebaseAuthException error){
-    String errorMessage ="";
+  String errorContext(FirebaseAuthException error) {
+    String errorMessage = "";
     switch (error) {
       case "invalid-email":
         errorMessage = "Your email address appears to be malformed.";
@@ -87,7 +115,7 @@ class AuthService {
         errorMessage = "Signing in with Email and Password is not enabled.";
         break;
       default:
-        errorMessage = "An undefined Error happene.";
+        errorMessage = "An undefined Error happened.";
     }
     return errorMessage;
   }

@@ -1,4 +1,5 @@
 import 'package:closet_app/helper/helper_function.dart';
+import 'package:closet_app/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:closet_app/widgets/widgets.dart';
 import 'package:closet_app/utils/constants.dart';
@@ -6,7 +7,7 @@ import "package:closet_app/services/fire_auth.dart"; // Import the AuthService
 import 'package:closet_app/screens/screens.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+  const SignUpPage({super.key});
 
   @override
   _SignUpPageState createState() => _SignUpPageState();
@@ -19,7 +20,7 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController userPass = TextEditingController();
   TextEditingController userEmail = TextEditingController();
 
-  final AuthService _authService = AuthService(); // Initialize the AuthService
+  final AuthService _authService = locator.get<AuthService>(); // Initialize the AuthService
 
 
   Future<void> _signUp() async {
@@ -127,7 +128,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) =>  LoginPage()),
+                      MaterialPageRoute(builder: (context) =>  const LoginPage()),
                     );
                   },
                   child: RichText(
