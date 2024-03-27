@@ -7,10 +7,10 @@ class PasswordTextField extends StatefulWidget {
   final TextEditingController controller;
 
   const PasswordTextField({
-    super.key,
+    Key? key,
     required this.hintTxt,
     required this.controller,
-  });
+  }) : super(key: key);
 
   @override
   _PasswordTextFieldState createState() => _PasswordTextFieldState();
