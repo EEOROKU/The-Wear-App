@@ -16,8 +16,12 @@ class _LoginPageState extends State<LoginPage> {
 
   TextEditingController userEmail = TextEditingController();
   TextEditingController userPass = TextEditingController();
+  final AuthService _authService ;//= AuthService(); // Initialize the AuthService
 
-  final AuthService _authService = AuthService(); // Initialize the AuthService
+  _LoginPageState({firebaseAuth})
+  : _authService = AuthService();
+
+
 
 
 

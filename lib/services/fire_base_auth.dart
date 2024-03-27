@@ -1,28 +1,58 @@
 import 'package:closet_app/model/model.dart';
+
 import 'package:closet_app/services/database_service.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'FIrebaseAuthSingleton.dart';
 import '../helper/helper_function.dart';
 
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuthSingleton.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestoreSingleton.instance;
+
+  postDetailsToFirestore(String userName) async {
+    User? user = _auth.currentUser;
+    UserModel userModel = UserModel();
+    // writing all the values
+    userModel.userEmail = user!.email;
+    userModel.uid = user.uid;
+    userModel.userName = userName;
+
+    await _firestore
+        .collection("users")
+        .doc(user.uid)
+        .set(userModel.toMap());
+  }
+
+  FirebaseAuth get firebaseAuthInstance => _auth;
+
 
 
   Future<User?> signInWithEmailAndPassword(String email, String password) async {
     try {
+      String signInEmail = email;
+
       UserCredential credential = await _auth.signInWithEmailAndPassword(
-        email: email,
+        email: signInEmail,
         password: password,
       );
       User? user = credential.user;
+
       await DatabaseService(uid: user!.uid).gettingUserData(user.uid);
+
       return user;
     } on FirebaseAuthException catch (e) {
       // Handle specific Firebase authentication exceptions
-      String error = errorContext(e);
-      throw error;
+      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+        throw 'Invalid email or password.';
+      } else {
+        throw 'An error occurred: ${errorContext(e.code)}';
+      }
     } catch (e) {
       // Handle other exceptions
-      throw 'An unexpected error occurred: ${e.toString()}';
+      throw 'An unexpected error occurred.';
     }
   }
 
@@ -38,19 +68,30 @@ class AuthService {
         password: password,
       );
       User? user = credential.user;
+      postDetailsToFirestore(userName);
+
+      // saving the values to our shared preferences
+      await HelperFunctions.saveUserLoggedInStatus(true);
+      await HelperFunctions.saveUserEmailSF(email);
+      await HelperFunctions.saveUserNameSF(userName);
 
       await DatabaseService(uid: user?.uid).savingUserData(userName, email, "");
 
       return user;
     } on FirebaseAuthException catch (e) {
+  
+
+
       // Handle specific Firebase authentication exceptions
-      String error = errorContext(e);
-      throw error;
+      if (e.code == 'email-already-in-use') {
+        throw 'The email address is already in use.';
+      } else {
+        throw 'An error occurred: ${errorContext(e.code)}';
+      }
     } catch (e) {
       // Handle other exceptions
-      throw 'An unexpected error occurred: ${e.toString()}';
+      throw 'An unexpected error occurred.';
     }
-  }
 
   // Get current user
   Future<UserModel> getCurrentUser() async {
@@ -79,6 +120,7 @@ class AuthService {
   Future<void> updatePassword(String password) async {
     var user = _auth.currentUser;
     user?.updatePassword(password);
+
   }
 
   Future signOut() async {
@@ -90,11 +132,11 @@ class AuthService {
     } catch (e) {
       return null;
     }
-  }
 
   // figure out how to handle message
   String errorContext(FirebaseAuthException error) {
     String errorMessage = "";
+
     switch (error) {
       case "invalid-email":
         errorMessage = "Your email address appears to be malformed.";
