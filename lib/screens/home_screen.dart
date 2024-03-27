@@ -1,220 +1,62 @@
+import 'dart:io';
+
 import 'package:closet_app/helper/helper_function.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:closet_app/locator.dart';
+import 'package:closet_app/screens/Item_screens/add_item.dart';
+import 'package:closet_app/widgets/avatar.dart';
+import 'package:closet_app/view_controller/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:closet_app/model/model.dart';
 import 'package:closet_app/screens/screens.dart';
+import 'package:closet_app/services/fire_auth.dart';
 
-import '../services/fire_auth.dart';
+import '../widgets/closet.dart';
+import '../widgets/outfit.dart';
+
+
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String userName = "";
-  String email = "";
-  final AuthService authService = AuthService();
-
-  User? user = FirebaseAuth.instance.currentUser;
-
+  UserModel? userModel;
+  late final AuthService authService = AuthService();
+  int _selectedIndex = 0;
+  int _screenIndex =0;
 
   @override
   void initState() {
     super.initState();
-    gettingUserData();
-  }
-  gettingUserData() async {
-    await HelperFunctions.getUserEmailFromSF().then((value) {
-      setState(() {
-        email = value!;
-      });
-    });
-    await HelperFunctions.getUserNameFromSF().then((value) {
-      setState(() {
-        userName = value!;
-      });
-    });
+    // Fetch user data
+    getUserData();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomePages(),
-    );
+  Future<void> getUserData() async {
+    userModel = await authService.getCurrentUser();
+    setState(() {});
   }
-  
-
-Future<void> logout(BuildContext context) async {
-
-  authService.signOut();
-  Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const LandingPage()));
-}
-}
-
-class HomePages extends StatefulWidget {
-  const HomePages({Key? key}) : super(key: key);
-
-  @override
-  State<HomePages> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePages> {
-  int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static  List<Widget> _widgetOptions = <Widget>[
-    Column(children: [
-      Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              radius: 40,
-              backgroundImage: NetworkImage(
-                  'https://as1.ftcdn.net/v2/jpg/03/39/45/96/1000_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg'),
-            ),
-          ),
-          Column(children: [
-            Text(
-              'Username',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-              ),
-            ),
-            Text('See public profile'),
-          ]),
-        ],
-      ),
-      Row(
-        children: [Icon(Icons.location_pin), Text('Charlottetown'), Text('                                         OOTD calendar>',style: TextStyle(color: Colors.blue),)],
-      ),
-      Row(
-        children: [
-          SizedBox(
-              width: 350,  // Set the width as per your requirement
-              height: 80, // Set the height as per your requirement
-              child: Card(
-                  color: Colors.grey,
-                  child: Padding(
-                      padding: EdgeInsets.all(8.5),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                                children: [
-                                  Row(children: [Text("Wed Mar 20"),Card(color: Colors.pink,child:Text('Today', ))]),
-                                  Row(children: [Text('3/-1 C    '), Icon(Icons.cloud_outlined)],)
-                                ]
-                            ),
-                            SizedBox( width:60, height:60,child: Card(child:Icon(Icons.edit_calendar)),),
-                          ]
-                      )
-                  )
-              )
-          )
-        ],
-      ),
-      Row(  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          TextButton(
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.black,
-            ),
-            onPressed: () {
-              // Handle button press
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.black),
-                ),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text('Closet'),
-              ),
-            ),
-          ),
-          TextButton(
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.black,
-            ),
-            onPressed: () {
-              // Handle button press
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.black),
-                ),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text('Outfit'),
-              ),
-            ),
-          ),
-        ],),
-      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          SizedBox( height:190,width: 190,child: Row(children: [Column(children: [Image.network('https://shorturl.at/gyEJ5',height: 190/2,width: 190/2,),Image.network('https://shorturl.at/gyEJ5',height: 190/2,width: 190/2,)]),
-            Column(children: [Image.network('https://shorturl.at/gyEJ5',height: 190/2,width: 190/2,),Image.network('https://shorturl.at/gyEJ5',height: 190/2,width: 190/2,)])],),),
-          SizedBox(height:190,width: 190, child: Card(color: Colors.white,child: Column(mainAxisAlignment: MainAxisAlignment.center,children: [Icon(Icons.door_sliding_outlined, size: 90.0,),Text('Create a closet')],),),)
-        ],
-      ),
-      Row(children: [Column(children: [Text('   All clothes'),Text('1')],),],),
-      Row(mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(
-            onPressed: (){},
-            child: Row(children: [Icon(Icons.archive_outlined,color: Colors.black,),Text('Archive', style: TextStyle(color: Colors.black),),],),
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.grey),
-            ),
-          ),
-        ],
-      )
-
-    ]),
-    Text(
-      'Add',
-      style: optionStyle,
-    ),
-
-    Column(children: [
-      Text('Closet',style: optionStyle,),
-      Row(
-        children: <Widget>[
-          Icon(Icons.filter_list),
-          SizedBox(width: 10),  // Optional: to give some spacing
-          Expanded(  // Use Expanded to make sure TextField takes the remaining space
-            child: TextField(
-              decoration: InputDecoration(
-                labelText: "Search",
-                border: OutlineInputBorder(),
-              ),
-            ),
-          ),
-        ],
-      )
-
-    ],
-    ),
-
-  ];
-
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      _screenIndex = index;
     });
   }
+  Future<void> logout(BuildContext context) async {
 
+    authService.signOut();
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LandingPage()));
+  }
+  bool _isAddPopupVisible = false;
+
+  void _toggleAddPopupVisibility() {
+    setState(() {
+      _isAddPopupVisible = !_isAddPopupVisible;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -230,46 +72,318 @@ class _HomePageState extends State<HomePages> {
           ),
         ],
       ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: PopupMenuButton<String>(
-              color: Colors.grey[300],
-              icon: Icon(Icons.border_all_outlined),
-              itemBuilder: (BuildContext context) =>
-              <PopupMenuEntry<String>>[
-                const PopupMenuItem<String>(
-                  value: 'Item1',
-                  child: Text('Add Clothes'),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Top Section
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Avatar(),
+                      SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            userModel!.userName!,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              // Handle clickable text action
+                            },
+                            child: Text(
+                              'Clickable Text',
+                              style: TextStyle(
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Icon(Icons.location_pin),
+                      SizedBox(width: 5),
+                      InkWell(
+                        onTap: () {
+                          // Handle location click action
+                        },
+                        child: Text(
+                          'Current Location',
+                          style: TextStyle(
+                            color: Colors.black26,
+                          ),
+                        ),
+                      ),
+                      Spacer(),
+                      InkWell(
+                        onTap: () {
+                          // Handle OOTD calendar click action
+                        },
+                        child: Text(
+                          'OOTD Calendar>',
+                          style: TextStyle(
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            // Horizontal Scrollable Section
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.generate(
+                  3,
+                      (index) => Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: 280,
+                      height: 80,
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Column(
+                                  children:[
+                                    Row(
+                                      children: [
+                                        Text('Today'),
+                                        SizedBox(width: 2),
+                                        Card(
+                                          color: Colors.pink,
+                                          child: Text('Today'),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 3),
+                                    Row(
+                                      children: [
+                                        Text('3/-1 C'),
+                                        SizedBox(width: 5),
+                                        Icon(Icons.cloud_outlined),
+                                      ],
+                                    ),
+                                  ]),
+                              Spacer(),
+                              SizedBox(
+                                width: 65,
+                                height: 65,
+                                child: Card(
+                                  child: Icon(Icons.edit_calendar),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-                const PopupMenuItem<String>(
-                  value: 'Item2',
-                  child: Text('Create Idea'),
+              ),
+            ),
+
+
+            // Middle Section
+            Expanded(
+              child: Container(
+                child: Column(
+                  children: [
+                  // Middle Section Widgets
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              _selectedIndex = 0;
+                            });
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.symmetric(vertical: 8),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: _selectedIndex == 0 ? Colors.black : Colors.transparent,
+                                  width: 2.0, // Thickness of the bottom border
+                                ),
+                              ),
+                            ),
+                            child: Text(
+                              'Closet',
+                              style: TextStyle(
+                                fontSize: _selectedIndex == 0 ? 20 : 18,
+                                fontWeight: _selectedIndex == 0 ? FontWeight.bold : FontWeight.normal,
+                                color: _selectedIndex == 0 ? Colors.black : Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              _selectedIndex = 1;
+                            });
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.symmetric(vertical: 8),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: _selectedIndex == 1 ? Colors.black : Colors.transparent,
+                                  width: 2.0, // Thickness of the bottom border
+                                ),
+                              ),
+                            ),
+                            child: Text(
+                              'Outfit',
+                              style: TextStyle(
+                                fontSize: _selectedIndex == 1 ? 20 : 18,
+                                fontWeight: _selectedIndex == 1 ? FontWeight.bold : FontWeight.normal,
+                                color: _selectedIndex == 1 ? Colors.black : Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(height: 0.5, thickness: 1), // Add a thick divider
+                  IndexedStack(
+                    index: _selectedIndex,
+                    children: [
+                      ClosetScreen(),
+                      OutfitScreen(),
+                    ],
+                  ),
+                ],
+              ),),
+            ),
+
+            // Bottom Navigation Bar
+            Stack(
+              children: [
+                BottomNavigationBar(
+                  items: <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.home),
+                      label: 'Home',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: GestureDetector(
+                        onTap: () {
+                          _toggleAddPopupVisibility();
+                        },
+                        child: AnimatedSwitcher(
+                          duration: Duration(milliseconds: 300),
+                          child: Icon(
+                            _isAddPopupVisible ? Icons.close : Icons.add,
+                            key: ValueKey<bool>(_isAddPopupVisible),
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      label: 'Add',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: InkWell(
+                        onTap: () {
+                          // Navigate to closet screen
+                        },
+                        child: Icon(Icons.boy_sharp),
+                      ),
+                      label: 'Closet',
+                    ),
+                  ],
+                  currentIndex: _screenIndex,
+                  selectedItemColor: Colors.black,
+                  onTap: (index) {
+                    if (index == 1) {
+                      // Toggle the popup visibility
+                      _toggleAddPopupVisibility();
+                    } else {
+                      setState(() {
+                        _screenIndex = index;
+                      });
+                    }
+                  },
                 ),
-                const PopupMenuItem<String>(
-                  value: 'Item2',
-                  child: Text('Schedule outfit'),
+                AnimatedPositioned(
+                  duration: Duration(milliseconds: 300),
+                  bottom: _isAddPopupVisible ? 60 : -100,
+                  right: 20,
+                  child: AnimatedSwitcher(
+                    duration: Duration(milliseconds: 300),
+                    child: _isAddPopupVisible
+                        ? Container(
+                      width: 150,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 8,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Row(
+                              children: [
+                                Icon(Icons.woman),
+                                SizedBox(width: 10),
+                                Text('Add Clothes', style: TextStyle(color: Colors.white),),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                            child: Divider(color: Colors.grey),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Row(
+                              children: [
+                                Icon(Icons.lightbulb),
+                                SizedBox(width: 10),
+                                Text('Create Idea', style: TextStyle(color: Colors.white)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                        : SizedBox.shrink(),
+                  ),
                 ),
               ],
             ),
-            label: 'Add',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.boy_sharp),
-            label: 'Closet',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.black,
-        onTap: _onItemTapped,
-      ),
+          ],
+        ),
+
     );
-  }
-}
+  }}

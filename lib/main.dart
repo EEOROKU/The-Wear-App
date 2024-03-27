@@ -1,15 +1,19 @@
-import 'package:closet_app/helper/helper_function.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:closet_app/screens/screens.dart';
-import 'firebase_options.dart';
+import 'package:flutter/material.dart';
+import 'package:closet_app/locator.dart'; // Import the file where setupServices() is defined
+import 'package:closet_app/firebase_options.dart'; // Assuming you have this file for Firebase options
 
-Future<void> main() async {
+import 'helper/helper_function.dart';
+import 'screens/screens.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,); // Initialize Firebase
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform); // Initialize Firebase
+  setupServices(); // Initialize the service locator
   runApp(const MyApp());
 }
+
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -18,8 +22,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-
   bool _isSignedIn = false;
 
   @override
@@ -28,7 +30,7 @@ class _MyAppState extends State<MyApp> {
     getUserLoggedInStatus();
   }
 
-  getUserLoggedInStatus() async {
+  Future<void> getUserLoggedInStatus() async {
     await HelperFunctions.getUserLoggedInStatus().then((value) {
       if (value != null) {
         setState(() {
@@ -37,6 +39,7 @@ class _MyAppState extends State<MyApp> {
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -55,8 +58,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-
 
 class AuthenticationWrapper extends StatelessWidget {
   const AuthenticationWrapper({super.key});
