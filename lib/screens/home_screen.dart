@@ -280,8 +280,73 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             // Bottom Navigation Bar
-            Stack(
-              children: [
+
+
+            AnimatedPositioned(
+              duration: Duration(milliseconds: 300),
+              bottom: _isAddPopupVisible ? 60 : -100,
+              right: 20,
+              child: AnimatedSwitcher(
+                duration: Duration(milliseconds: 300),
+                child: _isAddPopupVisible
+                    ? Container(
+                  width: 150,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 8,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>  AddClothesPage()));
+
+                          // Handle Add Clothes tap
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Row(
+                            children: [
+                              Icon(Icons.woman),
+                              SizedBox(width: 10),
+                              Text('Add Clothes', style: TextStyle(color: Colors.white)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Divider(color: Colors.grey),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          // Handle Create Idea tap
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Row(
+                            children: [
+                              Icon(Icons.lightbulb),
+                              SizedBox(width: 10),
+                              Text('Create Idea', style: TextStyle(color: Colors.white)),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+                    : SizedBox.shrink(),
+              ),
+            ),
                 BottomNavigationBar(
                   items: <BottomNavigationBarItem>[
                     BottomNavigationBarItem(
@@ -327,61 +392,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                   },
                 ),
-                AnimatedPositioned(
-                  duration: Duration(milliseconds: 300),
-                  bottom: _isAddPopupVisible ? 60 : -100,
-                  right: 20,
-                  child: AnimatedSwitcher(
-                    duration: Duration(milliseconds: 300),
-                    child: _isAddPopupVisible
-                        ? Container(
-                      width: 150,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 8,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Row(
-                              children: [
-                                Icon(Icons.woman),
-                                SizedBox(width: 10),
-                                Text('Add Clothes', style: TextStyle(color: Colors.white),),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                            child: Divider(color: Colors.grey),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Row(
-                              children: [
-                                Icon(Icons.lightbulb),
-                                SizedBox(width: 10),
-                                Text('Create Idea', style: TextStyle(color: Colors.white)),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                        : SizedBox.shrink(),
-                  ),
-                ),
-              ],
-            ),
+
+
           ],
         ),
 

@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'clothing_detail.dart'; // Import the ClothingDetailsScreen
 
 class AddClothesPage extends StatefulWidget {
-  const AddClothesPage({super.key});
+  const AddClothesPage({Key? key}) : super(key: key);
 
   @override
   _AddClothesPageState createState() => _AddClothesPageState();
@@ -22,35 +22,14 @@ class _AddClothesPageState extends State<AddClothesPage> {
     setState(() {
       if (pickedFile != null) {
         _imageFile = File(pickedFile.path);
-
-        _uploadImageToStorage(_imageFile!);
       } else {
         print('No image selected.');
       }
     });
   }
-  Future<void> _uploadImageToStorage(File imageFile) async {
-    try {
-      // Create a reference to the image file in Firebase Storage
-      Reference ref = _storage.ref().child('clothing_images/${DateTime.now().toString()}');
 
-      // Upload file to Firebase Storage
-      UploadTask uploadTask = ref.putFile(imageFile);
 
-      // Get download URL of uploaded image
-      String imageUrl = await (await uploadTask).ref.getDownloadURL();
 
-      // Navigate to ClothingDetailsScreen with image URL
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ClothingDetailsScreen( imageFile:imageFile,),
-        ),
-      );
-    } catch (e) {
-      print('Error uploading image: $e');
-    }
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,11 +60,25 @@ class _AddClothesPageState extends State<AddClothesPage> {
             ),
             const SizedBox(height: 20),
             _imageFile != null
-                ? Image.file(
-              _imageFile!,
-              height: 200,
-              width: double.infinity,
-              fit: BoxFit.cover,
+                ? Column(
+              children: [
+                Image.file(
+                  _imageFile!,
+                  height: 200,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () =>    Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ClothingDetailsScreen(imageFile: _imageFile!),
+                    ),
+                  ),
+                  child: const Text('Next'),
+                ),
+              ],
             )
                 : const SizedBox(),
           ],
@@ -93,9 +86,4 @@ class _AddClothesPageState extends State<AddClothesPage> {
       ),
     );
   }
-}
-void main() {
-  runApp(const MaterialApp(
-    home: AddClothesPage(),
-  ));
 }

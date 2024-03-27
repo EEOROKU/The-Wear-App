@@ -14,10 +14,10 @@ class AuthService {
 
   postDetailsToFirestore(String userName) async {
     User? user = _auth.currentUser;
-    UserModel userModel = UserModel();
+    UserModel userModel = UserModel(user!.uid);
     // writing all the values
     userModel.userEmail = user!.email;
-    userModel.uid = user.uid;
+
     userModel.userName = userName;
 
     await _firestore
@@ -48,7 +48,7 @@ class AuthService {
       if (e.code == 'user-not-found' || e.code == 'wrong-password') {
         throw 'Invalid email or password.';
       } else {
-        throw 'An error occurred: ${errorContext(e.code)}';
+        throw 'An error occurred: ${errorContext(e)}';
       }
     } catch (e) {
       // Handle other exceptions
@@ -79,20 +79,17 @@ class AuthService {
 
       return user;
     } on FirebaseAuthException catch (e) {
-  
-
-
       // Handle specific Firebase authentication exceptions
       if (e.code == 'email-already-in-use') {
         throw 'The email address is already in use.';
       } else {
-        throw 'An error occurred: ${errorContext(e.code)}';
+        throw 'An error occurred: ${errorContext(e)}';
       }
     } catch (e) {
       // Handle other exceptions
       throw 'An unexpected error occurred.';
     }
-
+  }
   // Get current user
   Future<UserModel> getCurrentUser() async {
     var user = _auth.currentUser;
@@ -132,7 +129,7 @@ class AuthService {
     } catch (e) {
       return null;
     }
-
+  }
   // figure out how to handle message
   String errorContext(FirebaseAuthException error) {
     String errorMessage = "";
