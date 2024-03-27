@@ -6,7 +6,7 @@ import "package:closet_app/services/fire_auth.dart"; // Import the AuthService
 import 'package:closet_app/screens/screens.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+  const SignUpPage({super.key});
 
   @override
   _SignUpPageState createState() => _SignUpPageState();
