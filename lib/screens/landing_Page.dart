@@ -4,7 +4,7 @@ import 'package:closet_app/widgets/widgets.dart';
 import 'package:closet_app/utils/constants.dart';
 
 class LandingPage extends StatefulWidget {
-  const LandingPage({super.key});
+  const LandingPage({Key? key}) : super(key: key);
 
   @override
   _LandingPageState createState() => _LandingPageState();
@@ -47,10 +47,10 @@ class _LandingPageState extends State<LandingPage> {
                 style: headline.copyWith(fontSize: 30.0),
               ),
             ),
-            const SizedBox(height: 15.0),
+            SizedBox(height: 15.0),
             Expanded(
               child: Center(
-                child: SizedBox(
+                child: Container(
                   width: width * 0.9, // 90% of the screen width
                   child: AspectRatio(
                     aspectRatio: 10 / 15, // Custom aspect ratio
@@ -62,7 +62,7 @@ class _LandingPageState extends State<LandingPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 20.0), // Adjusted SizedBox height
+            SizedBox(height: 20.0), // Adjusted SizedBox height
             Padding(
               padding: const EdgeInsets.only(top: 0),
               child: Column(
@@ -86,14 +86,7 @@ class _LandingPageState extends State<LandingPage> {
                       );
                     },
                     child: TextButton(
-
-                      onPressed: ()  {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) =>  const LoginPage()),
-                        );
-                      },
-
+                      onPressed: () {},
                       child: RichText(
                         text: TextSpan(children: [
                           TextSpan(

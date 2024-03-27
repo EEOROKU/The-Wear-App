@@ -11,8 +11,8 @@ class DatabaseService {
 
 
   // saving the userdata
-  Future savingUserData(String userName, String userEmail, String? avatarUrl) async {
-    UserModel user = UserModel(uid!, userEmail: userEmail, userName: userName,avatarUrl: avatarUrl);
+  Future savingUserData(String userName, String userEmail) async {
+    UserModel user = UserModel(uid: uid, userEmail: userEmail, userName: userName);
 
     await HelperFunctions.saveUserLoggedInStatus(true);
     await HelperFunctions.saveUserEmailSF(userEmail);
@@ -21,34 +21,34 @@ class DatabaseService {
       "userName": userName,
       "userEmail": userEmail,
       "model": user.toMap(),
-
+      "profilePic": "",
+      "uid": uid,
     });
   }
 
-  Future<void> uploadAvatarUrl(String avatarUrl) async {
-    final userData = await gettingUserData(uid!); // Get user data from Firestore
-    String? userName = userData.userName;
-    String? userEmail = userData.userEmail;
-    await savingUserData(userName!, userEmail!, avatarUrl);
+  // getting user data
+  Future gettingUserData(String email) async {
+    QuerySnapshot snapshot = await userCollection.where("userEmail", isEqualTo: email).get();
+
+    if (snapshot.docs.isEmpty) {
+      // Handle case where no user with the specified email is found
+      return null;
     }
 
+    // Loop through each document in the query snapshot
+    for (DocumentSnapshot doc in snapshot.docs) {
+      // Retrieve the user data from each document
+      String userName = doc['userName'];
+      String userEmail = doc['userEmail'];
 
+      // Save user data using your HelperFunctions or perform any other operations
+      await HelperFunctions.saveUserLoggedInStatus(true);
+      await HelperFunctions.saveUserEmailSF(userEmail);
+      await HelperFunctions.saveUserNameSF(userName);
+    }
 
-  Future<UserModel> gettingUserData(String uid) async {
-    DocumentSnapshot snapshot = await userCollection.doc(uid).get();
-
-    // Retrieve the user data from the document
-    String userName = snapshot['userName'];
-    String userEmail = snapshot['userEmail'];
-    String? avatarUrl = snapshot['model']["avatarUrl"]; // Make sure to handle null for avatarUrl
-
-    // Save user data using your HelperFunctions or perform any other operations
-    await HelperFunctions.saveUserLoggedInStatus(true);
-    await HelperFunctions.saveUserEmailSF(userEmail);
-    await HelperFunctions.saveUserNameSF(userName);
-
-    // Return the user data
-    return UserModel(uid, userEmail: userEmail, userName: userName, avatarUrl: avatarUrl);
+    // Return the query snapshot (or any other relevant data)
+    return snapshot;
   }
 
 
