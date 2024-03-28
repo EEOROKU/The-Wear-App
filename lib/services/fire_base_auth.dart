@@ -5,91 +5,65 @@ import 'package:closet_app/services/database_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'FIrebaseAuthSingleton.dart';
 import '../helper/helper_function.dart';
 
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuthSingleton.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestoreSingleton.instance;
 
-  postDetailsToFirestore(String userName) async {
-    User? user = _auth.currentUser;
-    UserModel userModel = UserModel(user!.uid);
-    // writing all the values
-    userModel.userEmail = user!.email;
-
-    userModel.userName = userName;
-
-    await _firestore
-        .collection("users")
-        .doc(user.uid)
-        .set(userModel.toMap());
-  }
-
-  FirebaseAuth get firebaseAuthInstance => _auth;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
 
 
-  Future<User?> signInWithEmailAndPassword(String email, String password) async {
+
+
+
+
+  Future<UserModel> signInWithEmailAndPassword(String email, String password) async {
     try {
-      String signInEmail = email;
+
 
       UserCredential credential = await _auth.signInWithEmailAndPassword(
-        email: signInEmail,
+        email: email,
         password: password,
       );
       User? user = credential.user;
 
-      await DatabaseService(uid: user!.uid).gettingUserData(user.uid);
 
-      return user;
+
+      return  await DatabaseService(uid: user!.uid).gettingUserData(user.uid);
     } on FirebaseAuthException catch (e) {
       // Handle specific Firebase authentication exceptions
-      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
-        throw 'Invalid email or password.';
-      } else {
-        throw 'An error occurred: ${errorContext(e)}';
-      }
+      String error = errorContext(e);
+      throw error;
     } catch (e) {
       // Handle other exceptions
-      throw 'An unexpected error occurred.';
+      throw 'An unexpected error occurred: ${e.toString()}';
     }
   }
 
-  Future<void> updateDisplayName(String displayName) async {
-    var user = _auth.currentUser;
-    user?.updateDisplayName(displayName);
-  }
 
-  Future<User?> signUpWithEmailAndPassword(String email, String password, String userName) async {
+
+
+  Future<UserModel?> signUpWithEmailAndPassword(String email, String password, String userName) async {
     try {
       UserCredential credential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
       User? user = credential.user;
-      postDetailsToFirestore(userName);
-
-      // saving the values to our shared preferences
-      await HelperFunctions.saveUserLoggedInStatus(true);
-      await HelperFunctions.saveUserEmailSF(email);
-      await HelperFunctions.saveUserNameSF(userName);
 
       await DatabaseService(uid: user?.uid).savingUserData(userName, email, "");
 
-      return user;
+      return  await DatabaseService(uid: user!.uid).gettingUserData(user.uid);
     } on FirebaseAuthException catch (e) {
       // Handle specific Firebase authentication exceptions
-      if (e.code == 'email-already-in-use') {
-        throw 'The email address is already in use.';
-      } else {
-        throw 'An error occurred: ${errorContext(e)}';
-      }
+      String error = errorContext(e);
+      throw error;
     } catch (e) {
       // Handle other exceptions
-      throw 'An unexpected error occurred.';
+      throw 'An unexpected error occurred: ${e.toString()}';
     }
   }
+
   // Get current user
   Future<UserModel> getCurrentUser() async {
     var user = _auth.currentUser;
@@ -100,6 +74,7 @@ class AuthService {
       throw Exception("User is not authenticated");
     }
   }
+
 
   Future<bool> validatePassword(String email, String password) async {
     var user = _auth.currentUser;
@@ -112,6 +87,10 @@ class AuthService {
       print(e);
       return false;
     }
+  }
+  // Method to get the current user's ID
+  String? getCurrentUserID() {
+    return _auth.currentUser?.uid;
   }
 
   Future<void> updatePassword(String password) async {

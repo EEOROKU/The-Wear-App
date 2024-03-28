@@ -1,9 +1,7 @@
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'clothing_detail.dart'; // Import the ClothingDetailsScreen
-
+import 'clothing_detail.dart';
 class AddClothesPage extends StatefulWidget {
   const AddClothesPage({Key? key}) : super(key: key);
 
@@ -12,9 +10,9 @@ class AddClothesPage extends StatefulWidget {
 }
 
 class _AddClothesPageState extends State<AddClothesPage> {
-  File? _imageFile;
+  var _imageFile;
+
   final ImagePicker _picker = ImagePicker();
-  final FirebaseStorage _storage = FirebaseStorage.instance; // Create FirebaseStorage instance
 
   Future<void> _getImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
@@ -28,13 +26,18 @@ class _AddClothesPageState extends State<AddClothesPage> {
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Clothes'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context); // Navigate back to the previous page
+          },
+        ),
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -70,10 +73,11 @@ class _AddClothesPageState extends State<AddClothesPage> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () =>    Navigator.push(
+                  onPressed: () => Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ClothingDetailsScreen(imageFile: _imageFile!),
+                      builder: (context) =>
+                          ClothingDetailsScreen(imageFile: _imageFile!),
                     ),
                   ),
                   child: const Text('Next'),
@@ -81,6 +85,8 @@ class _AddClothesPageState extends State<AddClothesPage> {
               ],
             )
                 : const SizedBox(),
+            const SizedBox(height: 20),
+
           ],
         ),
       ),

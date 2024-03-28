@@ -1,7 +1,9 @@
+import 'package:closet_app/locator.dart';
+import 'package:closet_app/view_controller/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:closet_app/widgets/widgets.dart';
 import 'package:closet_app/utils/constants.dart';
-import "package:closet_app/services/fire_auth.dart";
+
 import 'package:closet_app/screens/screens.dart';
 import 'package:closet_app/helper/helper_function.dart';
 
@@ -16,12 +18,10 @@ class _LoginPageState extends State<LoginPage> {
 
   TextEditingController userEmail = TextEditingController();
   TextEditingController userPass = TextEditingController();
-  final AuthService _authService ;//= AuthService(); // Initialize the AuthService
-
-  _LoginPageState({firebaseAuth})
-  : _authService = AuthService();
 
 
+
+  final UserController userController = locator.get<UserController>();
 
 
 
@@ -53,9 +53,12 @@ class _LoginPageState extends State<LoginPage> {
     }
     try {
       // Call the sign-in method from AuthService
-      await _authService.signInWithEmailAndPassword(userEmail.text, userPass.text);
+      await userController.signInWithEmailAndPassword(userEmail.text, userPass.text);
       // Navigate to HomeScreen upon successful sign-in
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
     } catch (error) {
       // Display an error dialog if sign-in fails
       showDialog(
@@ -143,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                     const SpaceVH(height: 20.0),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (builder) => const SignUpPage()),
                         );

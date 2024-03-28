@@ -1,10 +1,9 @@
-import 'dart:io';
 
-import 'package:closet_app/helper/helper_function.dart';
 import 'package:closet_app/locator.dart';
 import 'package:closet_app/screens/Item_screens/add_item.dart';
-import 'package:closet_app/widgets/avatar.dart';
 import 'package:closet_app/view_controller/user_controller.dart';
+
+import 'package:closet_app/widgets/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:closet_app/model/model.dart';
 import 'package:closet_app/screens/screens.dart';
@@ -16,7 +15,7 @@ import '../widgets/outfit.dart';
 
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -24,7 +23,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   UserModel? userModel;
-  late final AuthService authService = AuthService();
   int _selectedIndex = 0;
   int _screenIndex =0;
 
@@ -36,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> getUserData() async {
-    userModel = await authService.getCurrentUser();
+    userModel = await locator.get<UserController>().currentUser;
     setState(() {});
   }
   void _onItemTapped(int index) {
@@ -46,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   Future<void> logout(BuildContext context) async {
 
-    authService.signOut();
+    await locator.get<UserController>().signOut();
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const LandingPage()));
   }
@@ -74,121 +72,110 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Top Section
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Avatar(),
-                      SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            userModel!.userName!,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              // Handle clickable text action
-                            },
-                            child: Text(
-                              'Clickable Text',
-                              style: TextStyle(
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Icon(Icons.location_pin),
-                      SizedBox(width: 5),
-                      InkWell(
-                        onTap: () {
-                          // Handle location click action
-                        },
-                        child: Text(
-                          'Current Location',
-                          style: TextStyle(
-                            color: Colors.black26,
+        children: [
+          // Top Section
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Avatar(),
+                    const SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          userModel!.userName!,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
                           ),
                         ),
-                      ),
-                      Spacer(),
-                      InkWell(
-                        onTap: () {
-                          // Handle OOTD calendar click action
-                        },
-                        child: Text(
-                          'OOTD Calendar>',
-                          style: TextStyle(
-                            color: Colors.blue,
-                          ),
+
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    const Icon(Icons.location_pin),
+                    const SizedBox(width: 5),
+                    InkWell(
+                      onTap: () {
+                        // Handle location click action
+                      },
+                      child: const Text(
+                        'Current Location',
+                        style: TextStyle(
+                          color: Colors.black26,
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                    const Spacer(),
+                    InkWell(
+                      onTap: () {
+                        // Handle OOTD calendar click action
+                      },
+                      child: const Text(
+                        'OOTD Calendar>',
+                        style: TextStyle(
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-            // Horizontal Scrollable Section
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: List.generate(
-                  3,
-                      (index) => Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      width: 280,
-                      height: 80,
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Column(
-                                  children:[
-                                    Row(
-                                      children: [
-                                        Text('Today'),
-                                        SizedBox(width: 2),
-                                        Card(
-                                          color: Colors.pink,
-                                          child: Text('Today'),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 3),
-                                    Row(
-                                      children: [
-                                        Text('3/-1 C'),
-                                        SizedBox(width: 5),
-                                        Icon(Icons.cloud_outlined),
-                                      ],
-                                    ),
-                                  ]),
-                              Spacer(),
-                              SizedBox(
-                                width: 65,
-                                height: 65,
-                                child: Card(
-                                  child: Icon(Icons.edit_calendar),
-                                ),
+          ),
+          // Horizontal Scrollable Section
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: List.generate(
+                3,
+                    (index) => const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: 280,
+                    height: 80,
+                    child: Card(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Column(
+                                children:[
+                                  Row(
+                                    children: [
+                                      Text('Today'),
+                                      SizedBox(width: 2),
+                                      Card(
+                                        color: Colors.pink,
+                                        child: Text('Today'),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 3),
+                                  Row(
+                                    children: [
+                                      Text('3/-1 C'),
+                                      SizedBox(width: 5),
+                                      Icon(Icons.cloud_outlined),
+                                    ],
+                                  ),
+                                ]),
+                            Spacer(),
+                            SizedBox(
+                              width: 65,
+                              height: 65,
+                              child: Card(
+                                child: Icon(Icons.edit_calendar),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -196,13 +183,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+          ),
 
 
-            // Middle Section
-            Expanded(
-              child: Container(
-                child: Column(
-                  children: [
+          // Middle Section
+          Expanded(
+            child: Container(
+              child: Column(
+                children: [
                   // Middle Section Widgets
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -216,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           child: Container(
                             alignment: Alignment.center,
-                            padding: EdgeInsets.symmetric(vertical: 8),
+                            padding: const EdgeInsets.symmetric(vertical: 8),
                             decoration: BoxDecoration(
                               border: Border(
                                 bottom: BorderSide(
@@ -245,7 +233,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           child: Container(
                             alignment: Alignment.center,
-                            padding: EdgeInsets.symmetric(vertical: 8),
+                            padding: const EdgeInsets.symmetric(vertical: 8),
                             decoration: BoxDecoration(
                               border: Border(
                                 bottom: BorderSide(
@@ -267,17 +255,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  Divider(height: 0.5, thickness: 1), // Add a thick divider
+                  const Divider(height: 0.5, thickness: 1), // Add a thick divider
                   IndexedStack(
                     index: _selectedIndex,
-                    children: [
+                    children: const [
                       ClosetScreen(),
                       OutfitScreen(),
                     ],
                   ),
                 ],
               ),),
-            ),
+          ),
+
 
             // Bottom Navigation Bar
 
@@ -307,7 +296,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       GestureDetector(
                         onTap: () {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>  AddClothesPage()));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const AddClothesPage()),
+                          );
+
 
                           // Handle Add Clothes tap
                         },
@@ -347,55 +340,58 @@ class _HomeScreenState extends State<HomeScreen> {
                     : SizedBox.shrink(),
               ),
             ),
-                BottomNavigationBar(
-                  items: <BottomNavigationBarItem>[
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.home),
-                      label: 'Home',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: GestureDetector(
-                        onTap: () {
-                          _toggleAddPopupVisibility();
-                        },
-                        child: AnimatedSwitcher(
-                          duration: Duration(milliseconds: 300),
-                          child: Icon(
-                            _isAddPopupVisible ? Icons.close : Icons.add,
-                            key: ValueKey<bool>(_isAddPopupVisible),
-                            color: Colors.black,
-                          ),
+
+
+              BottomNavigationBar(
+                items: <BottomNavigationBarItem>[
+                  const BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    label: 'Home',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: GestureDetector(
+                      onTap: () {
+                        _toggleAddPopupVisibility();
+                      },
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        child: Icon(
+                          _isAddPopupVisible ? Icons.close : Icons.add,
+                          key: ValueKey<bool>(_isAddPopupVisible),
+                          color: Colors.black,
                         ),
                       ),
-                      label: 'Add',
                     ),
-                    BottomNavigationBarItem(
-                      icon: InkWell(
-                        onTap: () {
-                          // Navigate to closet screen
-                        },
-                        child: Icon(Icons.boy_sharp),
-                      ),
-                      label: 'Closet',
+                    label: 'Add',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: InkWell(
+                      onTap: () {
+                        // Navigate to closet screen
+                      },
+                      child: const Icon(Icons.boy_sharp),
                     ),
-                  ],
-                  currentIndex: _screenIndex,
-                  selectedItemColor: Colors.black,
-                  onTap: (index) {
-                    if (index == 1) {
-                      // Toggle the popup visibility
-                      _toggleAddPopupVisibility();
-                    } else {
-                      setState(() {
-                        _screenIndex = index;
-                      });
-                    }
-                  },
-                ),
+                    label: 'Closet',
+                  ),
+                ],
+                currentIndex: _screenIndex,
+                selectedItemColor: Colors.black,
+                onTap: (index) {
+                  if (index == 1) {
+                    // Toggle the popup visibility
+                    _toggleAddPopupVisibility();
+                  } else {
+                    setState(() {
+                      _screenIndex = index;
+                    });
+                  }
+                },
+              ),
+
+            ],
+          ),
 
 
-          ],
-        ),
 
     );
   }}

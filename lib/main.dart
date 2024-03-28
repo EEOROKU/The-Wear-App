@@ -1,3 +1,4 @@
+import 'package:closet_app/view_controller/backend_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,8 @@ import 'screens/screens.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform); // Initialize Firebase
-  setupServices(); // Initialize the service locator
+
+  setupServices();
   runApp(const MyApp());
 }
 

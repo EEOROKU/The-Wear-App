@@ -33,7 +33,6 @@ class ClothingItemModel {
   String imageUrl;
   String? color;
   String? material;
-
   String? notes;
   String? season;
   String? occasion;

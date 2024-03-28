@@ -69,9 +69,9 @@ class _LandingPageState extends State<LandingPage> {
                 children: [
                   Mainbutton(
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (builder) => const LoginPage()),
+                        MaterialPageRoute(builder: (builder) => const SignUpPage()),
                       );
                     },
                     btnColor: blueButton,
@@ -79,16 +79,10 @@ class _LandingPageState extends State<LandingPage> {
                   ),
 
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>  LoginPage()),
-                      );
-                    },
                     child: TextButton(
 
                       onPressed: ()  {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) =>  const LoginPage()),
                         );
