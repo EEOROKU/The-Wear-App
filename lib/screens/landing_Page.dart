@@ -21,7 +21,7 @@ class _LandingPageState extends State<LandingPage> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.black,
+              Colors.grey,
               Colors.black.withOpacity(0.5),
               Colors.grey.withOpacity(0.2),
             ],
@@ -36,14 +36,14 @@ class _LandingPageState extends State<LandingPage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 0.0),
               child: Text(
-                'WEAR.',
+                'WEAR',
                 style: headline.copyWith(fontSize: 40.0),
               ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Text(
-                'Create your own digital closet',
+                'Your own digital closet',
                 style: headline.copyWith(fontSize: 30.0),
               ),
             ),
@@ -55,7 +55,7 @@ class _LandingPageState extends State<LandingPage> {
                   child: AspectRatio(
                     aspectRatio: 10 / 15, // Custom aspect ratio
                     child: Image.asset(
-                      'assets/image/page2.png',
+                      'assets/image/page2.jpg',
                       fit: BoxFit.fill, // Stretch the image to fit the container
                     ),
                   ),
@@ -74,7 +74,7 @@ class _LandingPageState extends State<LandingPage> {
                         MaterialPageRoute(builder: (builder) => const LoginPage()),
                       );
                     },
-                    btnColor: blueButton,
+                    btnColor: Colors.black,
                     text: 'Get Started',
                   ),
 
@@ -82,7 +82,7 @@ class _LandingPageState extends State<LandingPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) =>  LoginPage()),
+                        MaterialPageRoute(builder: (context) =>  const LoginPage()),
                       );
                     },
                     child: TextButton(
@@ -98,6 +98,7 @@ class _LandingPageState extends State<LandingPage> {
                           TextSpan(
                             text: ' Sign In',
                             style: headlineDot.copyWith(
+                              color: Colors.black,
                               fontSize: 14.0,
                             ),
                           ),

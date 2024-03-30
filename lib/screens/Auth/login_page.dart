@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: blackBG,
+      backgroundColor: Colors.grey[700],
       body: Padding(
         padding: const EdgeInsets.only(top: 50.0),
         child: SingleChildScrollView(
@@ -95,14 +95,13 @@ class _LoginPageState extends State<LoginPage> {
               const SpaceVH(height: 10.0),
               const Text(
                 'Please sign in to your account',
-                style: headline3,
+                style: TextStyle(color: Colors.black),
               ),
               const SpaceVH(height: 60.0),
               textFild(
                 controller: userEmail,
                 image: 'user.svg',
                 hintTxt: 'Email',
-
               ),
               PasswordTextField(
                 controller: userPass,
@@ -130,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                     Mainbutton(
                       onTap: _signIn, // Call _signIn method when button is tapped
                       text: 'Sign in',
-                      btnColor: blueButton,
+                      btnColor: black,
                     ),
                     const SpaceVH(height: 20.0),
                     Mainbutton(
@@ -160,6 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                             text: ' Sign Up',
                             style: headlineDot.copyWith(
                               fontSize: 14.0,
+                              color: Colors.black,
                             ),
                           ),
                         ]),

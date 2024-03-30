@@ -79,7 +79,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: blackBG,
+      backgroundColor: Colors.grey[700],
       body: Padding(
         padding: const EdgeInsets.only(top: 50.0),
         child: SingleChildScrollView(
@@ -95,7 +95,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 const SpaceVH(height: 10.0),
                 const Text(
                   'Please fill in the form to continue',
-                  style: headline3,
+                  style: TextStyle(color: Colors.black),
                 ),
                 const SpaceVH(height: 60.0),
 
@@ -120,7 +120,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 Mainbutton(
                   onTap: _signUp, // Call _signUp method when button is tapped
                   text: 'Sign Up',
-                  btnColor: blueButton,
+                  btnColor: black,
                 ),
                 const SpaceVH(height: 20.0),
                 TextButton(
@@ -142,6 +142,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         text: ' Sign In',
                         style: headlineDot.copyWith(
                           fontSize: 14.0,
+                          color: Colors.black
                         ),
                       ),
                     ]),
