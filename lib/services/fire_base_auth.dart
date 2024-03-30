@@ -10,12 +10,6 @@ class AuthService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-
-
-
-
-
-
   Future<UserModel> signInWithEmailAndPassword(String email, String password) async {
     try {
 

@@ -50,11 +50,6 @@ class BackendService {
 
   }
 
-  // Method to update user data
-  // Future<UserModel> updateUserData(UserModel userData) async {
-  //   return databaseService.updateUserData(userData);
-  // }
-
 
   Future<String?> uploadUserProfilePicture(String userID, File imageFile) async {
     try {
