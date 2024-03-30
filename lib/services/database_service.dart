@@ -74,7 +74,7 @@ class DatabaseService {
 
       // Retrieve or initialize the list of clothing items for the parent category
       List<ClothingItemModel> categoryItems =
-          (clothesMap[parentCategory] as List<dynamic>?)?.map((item) => ClothingItemModel.fromMap(item))?.toList() ?? [];
+          (clothesMap[parentCategory] as List<dynamic>?)?.map((item) => ClothingItemModel.fromMap(item)).toList() ?? [];
 
       // Add the new clothing item to the list
       categoryItems.add(clothingItem);

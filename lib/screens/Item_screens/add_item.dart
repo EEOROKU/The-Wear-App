@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'clothing_detail.dart';
 class AddClothesPage extends StatefulWidget {
-  const AddClothesPage({Key? key}) : super(key: key);
+  const AddClothesPage({super.key});
 
   @override
   _AddClothesPageState createState() => _AddClothesPageState();
@@ -32,7 +32,7 @@ class _AddClothesPageState extends State<AddClothesPage> {
       appBar: AppBar(
         title: const Text('Add Clothes'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context); // Navigate back to the previous page
           },

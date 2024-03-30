@@ -9,6 +9,7 @@ class UserModel {
 
   UserModel(this.uid, {this.userEmail, this.userName, this.avatarUrl, this.clothes});
 
+
   // receiving data from server
   factory UserModel.fromMap(map) {
     return UserModel(
@@ -18,7 +19,8 @@ class UserModel {
       avatarUrl: map['avatarUrl'],
       clothes: map['clothes'] != null
           ? Map<String, List<ClothingItemModel>>.from(map['clothes'])
-          : null,
+          : null
+
     );
   }
 
@@ -39,4 +41,6 @@ class UserModel {
   String getParentCategory(ClothingItemModel item) {
     return item.getParentCategory();
   }
+
+
 }

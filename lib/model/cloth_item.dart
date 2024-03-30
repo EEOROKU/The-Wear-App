@@ -74,7 +74,7 @@ class ClothingItemModel {
     );
   }
 String getImageUrl(){
-    return this.imageUrl;
+    return imageUrl;
 }
 
   // Method to get parent category of a ClothingItemModel

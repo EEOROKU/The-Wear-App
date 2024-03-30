@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:closet_app/locator.dart';
 import 'package:closet_app/model/cloth_item.dart';
 import 'package:closet_app/model/model.dart';
 import 'package:closet_app/services/database_service.dart';

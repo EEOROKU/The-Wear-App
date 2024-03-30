@@ -2,7 +2,6 @@ import 'package:closet_app/model/model.dart';
 
 import 'package:closet_app/services/database_service.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import '../helper/helper_function.dart';

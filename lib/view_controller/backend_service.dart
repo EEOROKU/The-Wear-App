@@ -62,7 +62,7 @@ class BackendService {
       await DatabaseService(uid: userID).uploadAvatarUrl(avatarUrl!);
       return avatarUrl;
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -70,7 +70,7 @@ class BackendService {
     try {
       return await storageRepo.uploadClothingItemPicture(userID,  imageFile, category);
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 

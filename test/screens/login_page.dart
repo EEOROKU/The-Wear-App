@@ -5,7 +5,7 @@ import 'package:closet_app/screens/Auth/login_page.dart';
 void main() {
   group('LoginPage Widget Tests', () {
     testWidgets('Empty Email and Password Validation', (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(home: LoginPage()));
+      await tester.pumpWidget(const MaterialApp(home: LoginPage()));
 
       await tester.tap(find.text('Sign in'));
       await tester.pump();
@@ -15,10 +15,10 @@ void main() {
     });
 
     testWidgets('Invalid Email Format Validation', (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(home: LoginPage()));
+      await tester.pumpWidget(const MaterialApp(home: LoginPage()));
 
-      await tester.enterText(find.byKey(Key('emailTextField')), 'invalidemail');
-      await tester.enterText(find.byKey(Key('passwordTextField')), 'password');
+      await tester.enterText(find.byKey(const Key('emailTextField')), 'invalidemail');
+      await tester.enterText(find.byKey(const Key('passwordTextField')), 'password');
       await tester.pump();
 
       await tester.tap(find.text('Sign in'));
@@ -29,10 +29,10 @@ void main() {
     });
 
     testWidgets('Short Password Validation', (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(home: LoginPage()));
+      await tester.pumpWidget(const MaterialApp(home: LoginPage()));
 
-      await tester.enterText(find.byKey(Key('emailTextField')), 'test@example.com');
-      await tester.enterText(find.byKey(Key('passwordTextField')), '123');
+      await tester.enterText(find.byKey(const Key('emailTextField')), 'test@example.com');
+      await tester.enterText(find.byKey(const Key('passwordTextField')), '123');
       await tester.pump();
 
       await tester.tap(find.text('Sign in'));

@@ -7,7 +7,6 @@ import 'package:closet_app/widgets/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:closet_app/model/model.dart';
 import 'package:closet_app/screens/screens.dart';
-import 'package:closet_app/services/fire_auth.dart';
 
 import '../widgets/closet.dart';
 import '../widgets/outfit.dart';
@@ -34,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> getUserData() async {
-    userModel = await locator.get<UserController>().currentUser;
+    userModel = locator.get<UserController>().currentUser;
     setState(() {});
   }
   void _onItemTapped(int index) {
@@ -272,11 +271,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
             AnimatedPositioned(
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               bottom: _isAddPopupVisible ? 60 : -100,
               right: 20,
               child: AnimatedSwitcher(
-                duration: Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 300),
                 child: _isAddPopupVisible
                     ? Container(
                   width: 150,
@@ -287,7 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       BoxShadow(
                         color: Colors.black.withOpacity(0.1),
                         blurRadius: 8,
-                        offset: Offset(0, 2),
+                        offset: const Offset(0, 2),
                       ),
                     ],
                   ),
@@ -304,8 +303,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           // Handle Add Clothes tap
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
+                        child: const Padding(
+                          padding: EdgeInsets.all(12.0),
                           child: Row(
                             children: [
                               Icon(Icons.woman),
@@ -315,16 +314,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12.0),
                         child: Divider(color: Colors.grey),
                       ),
                       GestureDetector(
                         onTap: () {
                           // Handle Create Idea tap
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
+                        child: const Padding(
+                          padding: EdgeInsets.all(12.0),
                           child: Row(
                             children: [
                               Icon(Icons.lightbulb),
@@ -337,7 +336,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 )
-                    : SizedBox.shrink(),
+                    : const SizedBox.shrink(),
               ),
             ),
 

@@ -4,7 +4,7 @@ import 'package:closet_app/view_controller/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:closet_app/widgets/widgets.dart';
 import 'package:closet_app/utils/constants.dart';
-import "package:closet_app/services/fire_auth.dart"; // Import the AuthService
+// Import the AuthService
 import 'package:closet_app/screens/screens.dart';
 
 class SignUpPage extends StatefulWidget {
