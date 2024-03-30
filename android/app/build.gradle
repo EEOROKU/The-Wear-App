@@ -24,6 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.closet_app"
+    compileSdkVersion 34
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
