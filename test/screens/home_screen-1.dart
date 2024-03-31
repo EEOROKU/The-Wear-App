@@ -21,7 +21,7 @@ void main() {
       await FirebaseTestInitializer.initializeFirebaseTest();
       mockAuthService = MockAuthService();
       mockHelperFunctions = MockHelperFunctions();
-      homeScreen = HomeScreen();
+      homeScreen = const HomeScreen();
     });
 
     testWidgets('Test initial state', (WidgetTester tester) async {

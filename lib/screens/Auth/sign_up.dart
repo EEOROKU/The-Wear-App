@@ -1,8 +1,11 @@
 import 'package:closet_app/helper/helper_function.dart';
+import 'package:closet_app/locator.dart';
+import 'package:closet_app/view_controller/user_controller.dart';
+
 import 'package:flutter/material.dart';
 import 'package:closet_app/widgets/widgets.dart';
 import 'package:closet_app/utils/constants.dart';
-import "package:closet_app/services/fire_auth.dart"; // Import the AuthService
+// Import the AuthService
 import 'package:closet_app/screens/screens.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -19,7 +22,8 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController userPass = TextEditingController();
   TextEditingController userEmail = TextEditingController();
 
-  final AuthService _authService = AuthService(); // Initialize the AuthService
+  final UserController userController = locator.get<UserController>();
+
 
 
   Future<void> _signUp() async {
@@ -48,11 +52,13 @@ class _SignUpPageState extends State<SignUpPage> {
     }
     if (_formKey.currentState!.validate()) {
       try {
-        await _authService.signUpWithEmailAndPassword(
+        await userController.signUpWithEmailAndPassword(
             userEmail.text, userPass.text, userName.text);
         // SignUp successful, navigate to HomeScreen or another page
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
       } catch (error) {
         // SignUp failed, show error message
         showDialog(
@@ -125,7 +131,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 const SpaceVH(height: 20.0),
                 TextButton(
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) =>  LoginPage()),
                     );

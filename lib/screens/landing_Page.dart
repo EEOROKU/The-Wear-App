@@ -4,7 +4,7 @@ import 'package:closet_app/widgets/widgets.dart';
 import 'package:closet_app/utils/constants.dart';
 
 class LandingPage extends StatefulWidget {
-  const LandingPage({Key? key}) : super(key: key);
+  const LandingPage({super.key});
 
   @override
   _LandingPageState createState() => _LandingPageState();
@@ -21,7 +21,7 @@ class _LandingPageState extends State<LandingPage> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.grey,
+              Colors.black,
               Colors.black.withOpacity(0.5),
               Colors.grey.withOpacity(0.2),
             ],
@@ -36,57 +36,58 @@ class _LandingPageState extends State<LandingPage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 0.0),
               child: Text(
-                'WEAR',
+                'WEAR.',
                 style: headline.copyWith(fontSize: 40.0),
               ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Text(
-                'Your own digital closet',
+                'Create your own digital closet',
                 style: headline.copyWith(fontSize: 30.0),
               ),
             ),
-            SizedBox(height: 15.0),
+            const SizedBox(height: 15.0),
             Expanded(
               child: Center(
-                child: Container(
+                child: SizedBox(
                   width: width * 0.9, // 90% of the screen width
                   child: AspectRatio(
                     aspectRatio: 10 / 15, // Custom aspect ratio
                     child: Image.asset(
-                      'assets/image/page2.jpg',
+                      'assets/image/page2.png',
                       fit: BoxFit.fill, // Stretch the image to fit the container
                     ),
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 20.0), // Adjusted SizedBox height
+            const SizedBox(height: 20.0), // Adjusted SizedBox height
             Padding(
               padding: const EdgeInsets.only(top: 0),
               child: Column(
                 children: [
                   Mainbutton(
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (builder) => const LoginPage()),
+                        MaterialPageRoute(builder: (builder) => const SignUpPage()),
                       );
                     },
-                    btnColor: Colors.black,
+                    btnColor: blueButton,
                     text: 'Get Started',
                   ),
 
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>  const LoginPage()),
-                      );
-                    },
                     child: TextButton(
-                      onPressed: () {},
+
+                      onPressed: ()  {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) =>  const LoginPage()),
+                        );
+                      },
+
                       child: RichText(
                         text: TextSpan(children: [
                           TextSpan(
@@ -98,7 +99,6 @@ class _LandingPageState extends State<LandingPage> {
                           TextSpan(
                             text: ' Sign In',
                             style: headlineDot.copyWith(
-                              color: Colors.black,
                               fontSize: 14.0,
                             ),
                           ),
