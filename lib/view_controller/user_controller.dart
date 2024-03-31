@@ -21,11 +21,11 @@ class UserController {
 
   Future<void> uploadProfilePicture(File image) async {
     _currentUserUC.avatarUrl =
-    await _backendService.uploadUserProfilePicture(_currentUserUC.uid, image);
+    await _backendService.uploadUserProfilePicture(_currentUserUC.uid!, image);
   }
 
   Future<String?> uploadclothPicture(String category,File image) {
-    return _backendService.uploadClothingItemPicture(_currentUserUC.uid, image,category);
+    return _backendService.uploadClothingItemPicture(_currentUserUC.uid!, image,category);
   }
 
 
@@ -69,4 +69,3 @@ class UserController {
 
 
 }
-

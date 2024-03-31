@@ -1,17 +1,12 @@
-
 import 'package:closet_app/locator.dart';
 import 'package:closet_app/screens/Item_screens/add_item.dart';
 import 'package:closet_app/view_controller/user_controller.dart';
-
 import 'package:closet_app/widgets/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:closet_app/model/model.dart';
 import 'package:closet_app/screens/screens.dart';
-
 import '../widgets/closet.dart';
 import '../widgets/outfit.dart';
-
-
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -267,128 +262,128 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
 
 
-            // Bottom Navigation Bar
+          // Bottom Navigation Bar
 
 
-            AnimatedPositioned(
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 300),
+            bottom: _isAddPopupVisible ? 60 : -100,
+            right: 20,
+            child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
-              bottom: _isAddPopupVisible ? 60 : -100,
-              right: 20,
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                child: _isAddPopupVisible
-                    ? Container(
-                  width: 150,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const AddClothesPage()),
-                          );
+              child: _isAddPopupVisible
+                  ? Container(
+                width: 150,
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const AddClothesPage()),
+                        );
 
 
-                          // Handle Add Clothes tap
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.all(12.0),
-                          child: Row(
-                            children: [
-                              Icon(Icons.woman),
-                              SizedBox(width: 10),
-                              Text('Add Clothes', style: TextStyle(color: Colors.white)),
-                            ],
-                          ),
+                        // Handle Add Clothes tap
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: Row(
+                          children: [
+                            Icon(Icons.woman),
+                            SizedBox(width: 10),
+                            Text('Add Clothes', style: TextStyle(color: Colors.white)),
+                          ],
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12.0),
-                        child: Divider(color: Colors.grey),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          // Handle Create Idea tap
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.all(12.0),
-                          child: Row(
-                            children: [
-                              Icon(Icons.lightbulb),
-                              SizedBox(width: 10),
-                              Text('Create Idea', style: TextStyle(color: Colors.white)),
-                            ],
-                          ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12.0),
+                      child: Divider(color: Colors.grey),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        // Handle Create Idea tap
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: Row(
+                          children: [
+                            Icon(Icons.lightbulb),
+                            SizedBox(width: 10),
+                            Text('Create Idea', style: TextStyle(color: Colors.white)),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                )
-                    : const SizedBox.shrink(),
-              ),
+                    ),
+                  ],
+                ),
+              )
+                  : const SizedBox.shrink(),
             ),
-
-
-              BottomNavigationBar(
-                items: <BottomNavigationBarItem>[
-                  const BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    label: 'Home',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: GestureDetector(
-                      onTap: () {
-                        _toggleAddPopupVisibility();
-                      },
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 300),
-                        child: Icon(
-                          _isAddPopupVisible ? Icons.close : Icons.add,
-                          key: ValueKey<bool>(_isAddPopupVisible),
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    label: 'Add',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: InkWell(
-                      onTap: () {
-                        // Navigate to closet screen
-                      },
-                      child: const Icon(Icons.boy_sharp),
-                    ),
-                    label: 'Closet',
-                  ),
-                ],
-                currentIndex: _screenIndex,
-                selectedItemColor: Colors.black,
-                onTap: (index) {
-                  if (index == 1) {
-                    // Toggle the popup visibility
-                    _toggleAddPopupVisibility();
-                  } else {
-                    setState(() {
-                      _screenIndex = index;
-                    });
-                  }
-                },
-              ),
-
-            ],
           ),
+
+
+          BottomNavigationBar(
+            items: <BottomNavigationBarItem>[
+              const BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: GestureDetector(
+                  onTap: () {
+                    _toggleAddPopupVisibility();
+                  },
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: Icon(
+                      _isAddPopupVisible ? Icons.close : Icons.add,
+                      key: ValueKey<bool>(_isAddPopupVisible),
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                label: 'Add',
+              ),
+              BottomNavigationBarItem(
+                icon: InkWell(
+                  onTap: () {
+                    // Navigate to closet screen
+                  },
+                  child: const Icon(Icons.boy_sharp),
+                ),
+                label: 'Closet',
+              ),
+            ],
+            currentIndex: _screenIndex,
+            selectedItemColor: Colors.black,
+            onTap: (index) {
+              if (index == 1) {
+                // Toggle the popup visibility
+                _toggleAddPopupVisibility();
+              } else {
+                setState(() {
+                  _screenIndex = index;
+                });
+              }
+            },
+          ),
+
+        ],
+      ),
 
 
 

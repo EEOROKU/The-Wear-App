@@ -11,9 +11,9 @@ void setupServices() {
   BackendService backendService = BackendService();
 
   // Register BackendService in the locator
-   locator.registerSingleton<BackendService>(backendService);
-   UserController userController = UserController(backendService);
-   userController.initUser();
+  locator.registerSingleton<BackendService>(backendService);
+  UserController userController = UserController(backendService);
+  userController.initUser();
   // Register UserController in the locator
   locator.registerSingleton<UserController>(userController); // Pass the BackendService instance to the UserController constructor
 }

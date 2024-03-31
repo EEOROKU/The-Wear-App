@@ -18,7 +18,7 @@ Widget textFild({
       vertical: 10.0,
     ),
     decoration: BoxDecoration(
-      color: blackTextFild,
+      color: Colors.grey,
       borderRadius: BorderRadius.circular(20.0),
     ),
     child: Row(
