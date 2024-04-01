@@ -19,7 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   UserModel? userModel;
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
   int _screenIndex =0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -60,10 +60,10 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text('WEAR'),
         leading: null,
         actions: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.settings),
-          onPressed: () {
-            _scaffoldKey.currentState!.openEndDrawer();
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              _scaffoldKey.currentState!.openEndDrawer();
             },
           ),
         ],
@@ -71,51 +71,51 @@ class _HomeScreenState extends State<HomeScreen> {
       endDrawer: Drawer(
         child: Container (
           width: 100,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.grey,
-              ),
-              child: Text(
-                'Settings',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                ),
+                child: Text(
+                  'Settings',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
                 ),
               ),
-            ),
-            ListTile(
-              title: const Text('Toggle Dark Mode'),
-              onTap: () {
-                // Handle dark mode toggle
-              },
-            ),
-            ListTile(
-              title: const Text('Change Password'),
-              onTap: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const ChangePasswordPage()),
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('Change Username'),
-              onTap: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const ChangeUsernamePage()),
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('Logout'),
-              onTap: () {
-                logout(context);
-              },
-            ),
-          ],
-        ),
+              ListTile(
+                title: const Text('Toggle Dark Mode'),
+                onTap: () {
+                  // Handle dark mode toggle
+                },
+              ),
+              ListTile(
+                title: const Text('Change Password'),
+                onTap: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const ChangePasswordPage()),
+                  );
+                },
+              ),
+              ListTile(
+                title: const Text('Change Username'),
+                onTap: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const ChangeUsernamePage()),
+                  );
+                },
+              ),
+              ListTile(
+                title: const Text('Logout'),
+                onTap: () {
+                  logout(context);
+                },
+              ),
+            ],
+          ),
         ),
       ),
       body: Column(
@@ -140,7 +140,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontSize: 18,
                           ),
                         ),
-
                       ],
                     ),
                   ],
@@ -232,8 +231,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-
-
           // Middle Section
           Expanded(
             child: Container(
@@ -243,42 +240,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
+
                       Expanded(
                         child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              _selectedIndex = 0;
-                            });
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: _selectedIndex == 0 ? Colors.black : Colors.transparent,
-                                  width: 2.0, // Thickness of the bottom border
-                                ),
-                              ),
-                            ),
-                            child: Text(
-                              'Closet',
-                              style: TextStyle(
-                                fontSize: _selectedIndex == 0 ? 20 : 18,
-                                fontWeight: _selectedIndex == 0 ? FontWeight.bold : FontWeight.normal,
-                                color: _selectedIndex == 0 ? Colors.black : Colors.grey,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              _selectedIndex = 1;
-                            });
-                          },
+
                           child: Container(
                             alignment: Alignment.center,
                             padding: const EdgeInsets.symmetric(vertical: 8),
@@ -312,13 +277,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ],
-              ),),
+              ),
+            ),
           ),
-
-
           // Bottom Navigation Bar
-
-
           AnimatedPositioned(
             duration: const Duration(milliseconds: 300),
             bottom: _isAddPopupVisible ? 60 : -100,
@@ -348,8 +310,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           context,
                           MaterialPageRoute(builder: (context) => const AddClothesPage()),
                         );
-
-
                         // Handle Add Clothes tap
                       },
                       child: const Padding(
@@ -388,8 +348,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   : const SizedBox.shrink(),
             ),
           ),
-
-
           BottomNavigationBar(
             items: <BottomNavigationBarItem>[
               const BottomNavigationBarItem(
@@ -435,11 +393,8 @@ class _HomeScreenState extends State<HomeScreen> {
               }
             },
           ),
-
         ],
       ),
-
-
-
     );
+
   }}
