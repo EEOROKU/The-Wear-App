@@ -25,7 +25,7 @@ Widget textFild({
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         SizedBox(
-          width: 270.0,
+          width: 200.0,
           child: TextField(
             textAlignVertical: TextAlignVertical.center,
             obscureText: isObs,

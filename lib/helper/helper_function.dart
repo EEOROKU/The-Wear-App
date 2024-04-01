@@ -42,8 +42,6 @@ class HelperFunctions {
     return sf.getString(userNameKey);
   }
 
-
-
   static String? validateInputs(TextEditingController userEmail,TextEditingController userPass) {
     if (userEmail.text.trim().isEmpty || userPass.text.trim().isEmpty) {
       return 'Please enter both email and password.';
@@ -55,6 +53,13 @@ class HelperFunctions {
       return 'Password must be at least 6 characters long.';
     }
 
+    return null;
+  }
+
+  static String? validatePassword(TextEditingController password) {
+    if (password.text.length < 6) {
+      return 'Password must be at least 6 characters long.';
+    }
     return null;
   }
 

@@ -19,12 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController userEmail = TextEditingController();
   TextEditingController userPass = TextEditingController();
 
-
-
   final UserController userController = locator.get<UserController>();
-
-
-
 
   // Method to handle sign-in
   Future<void> _signIn() async {
