@@ -50,7 +50,7 @@ class _LandingPageState extends State<LandingPage> {
             const SizedBox(height: 15.0),
             Expanded(
               child: Center(
-                child: Container(
+                child: SizedBox(
                   width: width * 0.9, // 90% of the screen width
                   child: AspectRatio(
                     aspectRatio: 10 / 15, // Custom aspect ratio
@@ -62,7 +62,7 @@ class _LandingPageState extends State<LandingPage> {
                 ),
               ),
             ),
-            SizedBox(height: 20.0), // Adjusted SizedBox height
+            const SizedBox(height: 20.0), // Adjusted SizedBox height
             Padding(
               padding: const EdgeInsets.only(top: 0),
               child: Column(

@@ -7,10 +7,10 @@ class PasswordTextField extends StatefulWidget {
   final TextEditingController controller;
 
   const PasswordTextField({
-    Key? key,
+    super.key,
     required this.hintTxt,
     required this.controller,
-  }) : super(key: key);
+  });
 
   @override
   _PasswordTextFieldState createState() => _PasswordTextFieldState();
@@ -36,7 +36,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(
-            width: 270.0,
+            width: 200.0,
             child: TextField(
               textAlignVertical: TextAlignVertical.center,
               obscureText: _obscureText,

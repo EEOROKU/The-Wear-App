@@ -1,4 +1,5 @@
 import 'package:closet_app/locator.dart';
+import 'package:closet_app/screens/Auth/change_username.dart';
 import 'package:closet_app/screens/Item_screens/add_item.dart';
 import 'package:closet_app/view_controller/user_controller.dart';
 import 'package:closet_app/widgets/avatar.dart';
@@ -7,6 +8,7 @@ import 'package:closet_app/model/model.dart';
 import 'package:closet_app/screens/screens.dart';
 import '../widgets/closet.dart';
 import '../widgets/outfit.dart';
+import 'Auth/change_password.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   UserModel? userModel;
   int _selectedIndex = 0;
   int _screenIndex =0;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -52,17 +55,68 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: const Text('WEAR'),
+        leading: null,
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.settings),
-            tooltip: 'Show Snackbar',
-            onPressed: () {
-              // Should navigate to settings
+        IconButton(
+          icon: const Icon(Icons.settings),
+          onPressed: () {
+            _scaffoldKey.currentState!.openEndDrawer();
             },
           ),
         ],
+      ),
+      endDrawer: Drawer(
+        child: Container (
+          width: 100,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.grey,
+              ),
+              child: Text(
+                'Settings',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            ListTile(
+              title: const Text('Toggle Dark Mode'),
+              onTap: () {
+                // Handle dark mode toggle
+              },
+            ),
+            ListTile(
+              title: const Text('Change Password'),
+              onTap: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const ChangePasswordPage()),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Change Username'),
+              onTap: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const ChangeUsernamePage()),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Logout'),
+              onTap: () {
+                logout(context);
+              },
+            ),
+          ],
+        ),
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
