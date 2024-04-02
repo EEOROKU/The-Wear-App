@@ -289,6 +289,7 @@ class _HomeScreenState extends State<HomeScreen> {
               duration: const Duration(milliseconds: 300),
               child: _isAddPopupVisible
                   ? Container(
+                margin: const EdgeInsets.only(bottom: 10),
                 width: 150,
                 decoration: BoxDecoration(
                   color: Colors.black,

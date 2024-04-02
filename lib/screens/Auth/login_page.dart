@@ -1,4 +1,5 @@
 import 'package:closet_app/locator.dart';
+import 'package:closet_app/screens/Auth/forgot_password.dart';
 import 'package:closet_app/view_controller/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:closet_app/widgets/widgets.dart';
@@ -6,6 +7,8 @@ import 'package:closet_app/utils/constants.dart';
 
 import 'package:closet_app/screens/screens.dart';
 import 'package:closet_app/helper/helper_function.dart';
+
+import 'change_password.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -107,14 +110,22 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SpaceVH(height: 10.0),
               Align(
-                alignment: Alignment.centerRight,
+                alignment: Alignment.center,
                 child: Padding(
                   padding: const EdgeInsets.only(right: 20.0),
                   child: TextButton(
-                    onPressed: () {},
-                    child: const Text(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ForgotPasswordPage(userEmail: userEmail.text)),
+                      );
+                    },
+                    child: Text(
                       'Forgot Password?',
-                      style: headline3,
+                      style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          color: Colors.black.withOpacity(0.6),
+                      ),
                     ),
                   ),
                 ),
