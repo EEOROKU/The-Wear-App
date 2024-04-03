@@ -16,9 +16,9 @@ class BackendService {
     initialize(); // Call initialize method in the constructor
   }
 
-   void initialize() {
+  void initialize() {
     // Initialize and register Firebase services
-   authService = AuthService();
+    authService = AuthService();
     storageRepo = StorageRepo();
     databaseService = DatabaseService();
 
@@ -53,7 +53,7 @@ class BackendService {
 
   Future<String?> uploadUserProfilePicture(String userID, File imageFile) async {
     try {
-     String? avatarUrl = await storageRepo.uploadUserProfilePicture(userID, imageFile);
+      String? avatarUrl = await storageRepo.uploadUserProfilePicture(userID, imageFile);
       await DatabaseService(uid: userID).uploadAvatarUrl(avatarUrl!);
       return avatarUrl;
     } catch (error) {

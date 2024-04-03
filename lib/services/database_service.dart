@@ -1,3 +1,4 @@
+
 import 'package:closet_app/helper/helper_function.dart';
 import 'package:closet_app/model/cloth_item.dart';
 import 'package:closet_app/model/user_model.dart';
@@ -32,7 +33,7 @@ class DatabaseService {
     String? userName = userData.userName;
     String? userEmail = userData.userEmail;
     await savingUserData(userName!, userEmail!, avatarUrl);
-    }
+  }
 
 
 
@@ -133,4 +134,4 @@ class DatabaseService {
     });
 
 
-}}
+  }}
