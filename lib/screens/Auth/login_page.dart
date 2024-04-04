@@ -117,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ForgotPasswordPage(userEmail: userEmail.text)),
+                        MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
                       );
                     },
                     child: Text(

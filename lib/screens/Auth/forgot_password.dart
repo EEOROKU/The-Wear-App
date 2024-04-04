@@ -7,9 +7,7 @@ import '../../locator.dart';
 import 'login_page.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
-  final String userEmail;
-
-  const ForgotPasswordPage({Key? key, required this.userEmail}) : super(key: key);
+  const ForgotPasswordPage({Key? key}) : super(key: key);
 
   @override
   _ForgotPasswordPageState createState() => _ForgotPasswordPageState();
@@ -17,45 +15,25 @@ class ForgotPasswordPage extends StatefulWidget {
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   TextEditingController emailController = TextEditingController();
-  TextEditingController newPasswordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
-
   final UserController userController = locator.get<UserController>();
 
   String? _errorMessage;
 
-  Future<void> _changePassword() async {
+  Future<void> _resetPassword() async {
     setState(() {
       _errorMessage = null; // Clear previous error message
     });
 
-    // Validate password inputs
-    String? errorMessage = HelperFunctions.validatePassword(newPasswordController);
-    if (errorMessage != null) {
-      setState(() {
-        _errorMessage = errorMessage;
-      });
-      return; // Don't proceed with changing password if input is not valid
-    }
-
-    // Check if the confirmed password matches the new password
-    if (newPasswordController.text != confirmPasswordController.text) {
-      setState(() {
-        _errorMessage = "Passwords don't match";
-      });
-      return; // Don't proceed if passwords don't match
-    }
-
     try {
-      // Call the method to change the password
-       userController.updateUserPassword(newPasswordController.text);
-      // Display success dialog upon successful change of password
+      // Call the method to reset the password
+      await userController.resetPassword(emailController.text);
+      // Display success dialog upon successful password reset
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Change Password Success'),
-            content: const Text('Your password has been changed successfully.'),
+            title: const Text('Password Reset Successful'),
+            content: Text('Password reset email sent to ${emailController.text} if email exists'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -70,12 +48,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         },
       );
     } catch (error) {
-      // Display an error dialog if changing password fails
+      // Display an error dialog if password reset fails
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Change Password Failed'),
+            title: const Text('Password Reset Failed'),
             content: Text(error.toString()),
             actions: <Widget>[
               TextButton(
@@ -109,15 +87,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            textFild(
+            TextField(
               controller: emailController,
-              image: 'user.svg',
-              hintTxt: 'Email',
-            ),
-            const SizedBox(height: 10.0),
-            PasswordTextField(
-              controller: confirmPasswordController,
-              hintTxt: 'Confirm Password',
+              decoration: InputDecoration(
+                labelText: 'Email',
+                hintText: 'Enter your email',
+                prefixIcon: Icon(Icons.email),
+              ),
             ),
             if (_errorMessage != null)
               Padding(
@@ -129,8 +105,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               ),
             const SizedBox(height: 20.0),
             Mainbutton(
-              onTap: _changePassword,
-              text: 'Change Password',
+              onTap: _resetPassword,
+              text: 'Reset Password',
               btnColor: Colors.grey,
             ),
           ],
