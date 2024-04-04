@@ -20,7 +20,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   UserModel? userModel;
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
   int _screenIndex =0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -373,14 +373,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 label: 'Add',
               ),
               BottomNavigationBarItem(
-                icon: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ClosetPage()));// Navigate to closet screen
-                  },
-                  child: const Icon(Icons.boy_sharp),
-                ),
+                icon: const Icon(Icons.boy_sharp),
                 label: 'Closet',
               ),
             ],
@@ -394,6 +387,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 setState(() {
                   _screenIndex = index;
                 });
+              }
+              switch (index) {
+                case 0:// Navigate to home screen
+                  break;
+                case 1: // Navigate to add screen
+                  break;
+                case 2:
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ClosetPage())); // Navigate to closet screen
+                  break;
               }
             },
           ),

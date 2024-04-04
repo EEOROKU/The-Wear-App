@@ -183,9 +183,12 @@ class _ClosetPageState extends State<ClosetPage> {
               ),
             ],
           ),
+          Container(
+            height: 350,
+          ),
           AnimatedPositioned(
             duration: const Duration(milliseconds: 300),
-            bottom: _isAddPopupVisible ? 60 : -100,
+            bottom: _isAddPopupVisible ? 10 : -100,
             right: 20,
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
@@ -304,6 +307,19 @@ class _ClosetPageState extends State<ClosetPage> {
             setState(() {
               _screenIndex = index;
             });
+          }
+          switch (index) {
+            case 0:
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeScreen())); // Navigate to home screen
+              break;
+            case 1:
+               // Navigate to add screen
+              break;
+            case 2:
+               // Navigate to closet screen
+              break;
           }
         },
       ),
