@@ -35,9 +35,6 @@ class DatabaseService {
     await savingUserData(userName!, userEmail!, avatarUrl);
   }
 
-
-
-
   Future<UserModel> gettingUserData(String uid) async {
     DocumentSnapshot snapshot = await userCollection.doc(uid).get();
 
@@ -123,8 +120,6 @@ class DatabaseService {
     // Return an empty list if no items are found or an error occurs
     return [];
   }
-
-
 
 
   Future updateUserName(String uid,String userName) async {

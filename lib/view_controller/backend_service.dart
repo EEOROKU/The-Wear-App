@@ -73,6 +73,10 @@ class BackendService {
     return authService.validatePassword(email, password);
   }
 
+  Future<void> resetPassword(String email) async {
+    authService.resetPassword(email: email);
+  }
+
   void updatePassword(String password) {
     authService.updatePassword(password);}
 

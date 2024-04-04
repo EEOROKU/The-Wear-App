@@ -62,6 +62,11 @@ class UserController {
   }
 
 
+  Future<void> resetPassword(String email) async {
+    _backendService.resetPassword(email);
+  }
+
+
   Future<void> signOut() async {
     _backendService.signOut();
   }
