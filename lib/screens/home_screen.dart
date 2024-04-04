@@ -1,6 +1,7 @@
 import 'package:closet_app/locator.dart';
 import 'package:closet_app/screens/Auth/change_username.dart';
 import 'package:closet_app/screens/Item_screens/add_item.dart';
+import 'package:closet_app/screens/closet_page.dart';
 import 'package:closet_app/view_controller/user_controller.dart';
 import 'package:closet_app/widgets/avatar.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   UserModel? userModel;
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
   int _screenIndex =0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -57,6 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text('WEAR'),
         leading: null,
         actions: <Widget>[
@@ -283,7 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // Bottom Navigation Bar
           AnimatedPositioned(
             duration: const Duration(milliseconds: 300),
-            bottom: _isAddPopupVisible ? 60 : -100,
+            bottom: _isAddPopupVisible ? 60 : -700,
             right: 20,
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
@@ -337,7 +339,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             Icon(Icons.lightbulb),
                             SizedBox(width: 10),
-                            Text('Create Idea', style: TextStyle(color: Colors.white)),
+                            Text('Create Outfit', style: TextStyle(color: Colors.white)),
                           ],
                         ),
                       ),
@@ -371,12 +373,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 label: 'Add',
               ),
               BottomNavigationBarItem(
-                icon: InkWell(
-                  onTap: () {
-                    // Navigate to closet screen
-                  },
-                  child: const Icon(Icons.boy_sharp),
-                ),
+                icon: const Icon(Icons.boy_sharp),
                 label: 'Closet',
               ),
             ],
@@ -390,6 +387,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 setState(() {
                   _screenIndex = index;
                 });
+              }
+              switch (index) {
+                case 0:// Navigate to home screen
+                  break;
+                case 1: // Navigate to add screen
+                  break;
+                case 2:
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ClosetPage())); // Navigate to closet screen
+                  break;
               }
             },
           ),
