@@ -42,6 +42,19 @@ class DatabaseService {
     String userName = snapshot['userName'];
     String userEmail = snapshot['userEmail'];
     String? avatarUrl = snapshot['model']["avatarUrl"]; // Make sure to handle null for avatarUrl
+    print("yyyy");
+    // Convert dynamic map to Map<String, List<ClothingItemModel>>
+    Map<String, dynamic>? clothesMap = snapshot['model']['clothes'];
+    Map<String, List<ClothingItemModel>> convertedClothesMap = {};
+    if (clothesMap != null) {
+      clothesMap.forEach((key, value) {
+        List<dynamic> itemList = value as List<dynamic>;
+        List<ClothingItemModel> clothingItemList = itemList.map((item) => ClothingItemModel.fromMap(item)).toList();
+        convertedClothesMap[key] = clothingItemList;
+      });
+    }
+
+
 
     // Save user data using your HelperFunctions or perform any other operations
     await HelperFunctions.saveUserLoggedInStatus(true);
@@ -49,7 +62,7 @@ class DatabaseService {
     await HelperFunctions.saveUserNameSF(userName);
 
     // Return the user data
-    return UserModel(uid, userEmail: userEmail, userName: userName, avatarUrl: avatarUrl);
+    return UserModel(uid, userEmail: userEmail, userName: userName, avatarUrl: avatarUrl,clothes: convertedClothesMap);
   }
 
 
@@ -101,7 +114,7 @@ class DatabaseService {
       Map<String, dynamic> userData = userSnapshot.data() as Map<String, dynamic>;
 
       // Retrieve the 'clothes' map from the user data
-      Map<String, dynamic>? clothesMap = userData['clothes'] as Map<String, dynamic>?;
+      Map<String, dynamic>? clothesMap = userData['model']['clothes'] as Map<String, dynamic>?;
 
       // Check if the clothes map exists and contains the specified parent category
       if (clothesMap != null && clothesMap.containsKey(parentCategory)) {

@@ -17,7 +17,7 @@ class Avatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap:() async {
-        XFile? image =await ImagePicker().pickImage(source: ImageSource.camera,);
+        XFile? image =await ImagePicker().pickImage(source: ImageSource.gallery,);
         if (image != null) {
 
           await locator

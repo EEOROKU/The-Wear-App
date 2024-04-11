@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:closet_app/locator.dart';
+import 'package:closet_app/model/cloth_item.dart';
 import 'package:closet_app/model/user_model.dart'; // Import the UserModel class
 import 'package:closet_app/services/database_service.dart';
 import 'package:closet_app/services/fire_base_auth.dart';
 import 'package:closet_app/services/storage_repo.dart';
+import 'package:closet_app/view_controller/user_controller.dart';
 
 
 class BackendService {
@@ -48,6 +50,7 @@ class BackendService {
   Future<UserModel?> getCurrentUserData() async {
     return databaseService.gettingUserData(authService.getCurrentUserID()!);
 
+
   }
 
 
@@ -80,4 +83,32 @@ class BackendService {
   void updatePassword(String password) {
     authService.updatePassword(password);}
 
+
+// Method to fetch all clothing items
+  Future<dynamic> getAllClothes() async {
+    // Get the current user's data
+    UserModel? userModel =  locator.get<UserController>().currentUser;
+
+    // Return an empty list if user model is null or clothes map is null
+    if (userModel.clothes == null) {
+      return [];
+    }
+
+    // Combine all clothing items from different categories
+    return userModel.clothes!.values.expand((list) => list).toList();
+  }
+
+  // Method to fetch clothing items by a specific category
+  Future<List<ClothingItemModel>> getClothesByCategory(String category) async {
+    // Get the current user's data
+    UserModel? userModel =  locator.get<UserController>().currentUser;
+
+    // Return an empty list if user model is null or clothes map is null
+    if (userModel.clothes == null) {
+      return [];
+    }
+
+    // Return clothing items of the specified category
+    return userModel.clothes![category] ?? [];
+  }
 }
