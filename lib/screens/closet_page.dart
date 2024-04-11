@@ -1,16 +1,15 @@
 import 'package:closet_app/locator.dart';
 import 'package:closet_app/screens/Auth/change_username.dart';
-import 'package:closet_app/screens/Item_screens/add_item.dart';
 import 'package:closet_app/view_controller/user_controller.dart';
-import 'package:closet_app/widgets/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:closet_app/model/model.dart';
 import 'package:closet_app/screens/screens.dart';
-import 'package:closet_app/widgets/closet.dart';
-import 'package:closet_app/widgets/outfit.dart';
 import 'package:closet_app/screens/Auth/change_password.dart';
 
-import 'Cloth details.dart';
+import '../model/cloth_item.dart';
+import '../view_controller/backend_service.dart';
+import 'Item_screens/add_item.dart';
+import 'clothescreen.dart';
 
 class ClosetPage extends StatefulWidget {
   const ClosetPage({super.key});
@@ -20,17 +19,36 @@ class ClosetPage extends StatefulWidget {
 }
 
 class _ClosetPageState extends State<ClosetPage> {
+  final BackendService _backendService = locator.get<BackendService>();
+  List<ClothingItemModel> _clothes = [];
+  String? _selectedCategory;
+
   UserModel? userModel;
   int _selectedIndex = 1;
   int _screenIndex =2;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
   @override
   void initState() {
     super.initState();
-    // Fetch user data
-    getUserData();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    List<ClothingItemModel> clothes = await _backendService.getAllClothes();
+    setState(() {
+      _clothes = clothes;
+    });
+  }
+
+  Future<void> _loadClothesByCategory(String category) async {
+    List<ClothingItemModel> clothes =
+    await _backendService.getClothesByCategory(category);
+    setState(() {
+      _clothes = clothes;
+    });
   }
 
   Future<void> getUserData() async {
@@ -125,75 +143,47 @@ class _ClosetPageState extends State<ClosetPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('Closet',style: optionStyle,),
-          Row(
-            children: <Widget>[
-              Icon(Icons.filter_list),
-              SizedBox(width: 10),  // Optional: to give some spacing
-              Expanded(  // Use Expanded to make sure TextField takes the remaining space
-                child: TextField(
-                  decoration: InputDecoration(
-                    labelText: "Search",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
+          DropdownButton<String>(
+            value: _selectedCategory?? "All Clothes",
+            onChanged: (String? newValue) {
+              setState(() {
+                if (newValue == "All Clothes") {
+                  _selectedCategory = null;
+                  _loadData();
+                } else {
+                  _selectedCategory = newValue;
+                  _loadClothesByCategory(_selectedCategory!);
+                }
+              });
+            },
+            items: [
+              DropdownMenuItem<String>(
+                value: "All Clothes",
+                child: Text("All Clothes"),
               ),
+              ...ClothingDictionary.categoryToSubcategories.keys
+                  .map<DropdownMenuItem<String>>(
+                    (String category) =>
+                    DropdownMenuItem<String>(
+                      value: category,
+                      child: Text(category),
+                    ),
+              )
+                  .toList(),
             ],
           ),
-          Row(
-            children: <Widget>[
-              TextButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.black,
-                ),
-                onPressed: () {
-                  // Handle button press
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(width: 1.0, color: Colors.black),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text('All'),
-                  ),
-                ),
-              ),
-            ],),
-          Row(
-            children: [
-              Builder(
-                builder: (BuildContext context) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Details()),
-                      );
-                    },
-                    child: Image.network(
-                      'https://shorturl.at/gyEJ5',
-                      height: 200/2,
-                      width: 200/2,
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-          Container(
-            height: 350,
+          Expanded(
+            child: _buildBody(),
           ),
           AnimatedPositioned(
             duration: const Duration(milliseconds: 300),
-            bottom: _isAddPopupVisible ? 10 : -100,
+            bottom: _isAddPopupVisible ? 60 : -700,
             right: 20,
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
               child: _isAddPopupVisible
                   ? Container(
+                margin: const EdgeInsets.only(bottom: 10),
                 width: 150,
                 decoration: BoxDecoration(
                   color: Colors.black,
@@ -253,10 +243,9 @@ class _ClosetPageState extends State<ClosetPage> {
                   : const SizedBox.shrink(),
             ),
           ),
-
-
         ],
       ),
+
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -325,4 +314,34 @@ class _ClosetPageState extends State<ClosetPage> {
       ),
     );
 
-  }}
+  }
+  Widget _buildBody() {
+    if (_clothes.isEmpty) {
+      return Center(
+        child: Text(
+          _selectedCategory != null
+              ? "You currently have no items in $_selectedCategory's"
+              : "You currently have no items",
+          style: TextStyle(fontSize: 18),
+        ),
+      );
+    } else {
+      return ListView.builder(
+        itemCount: _clothes.length,
+        itemBuilder: (context, index) {
+          final ClothingItemModel clothingItem = _clothes[index];
+          return ListTile(
+            title: Text(clothingItem.subcategory),
+            subtitle: Text(clothingItem.occasion ?? ''),
+            leading: Image.network(
+              clothingItem.imageUrl,
+              width: 50,
+              height: 50,
+              fit: BoxFit.cover,
+            ),
+          );
+        },
+      );
+    }
+  }
+}
