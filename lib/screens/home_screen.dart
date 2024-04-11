@@ -2,6 +2,7 @@ import 'package:closet_app/locator.dart';
 import 'package:closet_app/screens/Auth/change_username.dart';
 import 'package:closet_app/screens/Item_screens/add_item.dart';
 import 'package:closet_app/screens/closet_page.dart';
+import 'package:closet_app/screens/clothescreen.dart';
 import 'package:closet_app/view_controller/user_controller.dart';
 import 'package:closet_app/widgets/avatar.dart';
 import 'package:flutter/material.dart';
@@ -331,6 +332,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ClothesScreen()),
+                        );
                         // Handle Create Idea tap
                       },
                       child: const Padding(
