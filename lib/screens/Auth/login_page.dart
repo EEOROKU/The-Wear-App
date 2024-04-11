@@ -1,9 +1,14 @@
+import 'package:closet_app/locator.dart';
+import 'package:closet_app/screens/Auth/forgot_password.dart';
+import 'package:closet_app/view_controller/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:closet_app/widgets/widgets.dart';
 import 'package:closet_app/utils/constants.dart';
-import "package:closet_app/services/fire_auth.dart";
-import 'package:closet_app/screens/screens.dart';
 
+import 'package:closet_app/screens/screens.dart';
+import 'package:closet_app/helper/helper_function.dart';
+
+import 'change_password.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,83 +22,41 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController userEmail = TextEditingController();
   TextEditingController userPass = TextEditingController();
 
-  final AuthService _authService = AuthService(); // Initialize the AuthService
-
-  bool _validateInputs() {
-    if (userEmail.text.trim().isEmpty || userPass.text.trim().isEmpty) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Validation Error'),
-            content: const Text('Please enter both email and password.'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-      return false;
-    } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(userEmail.text.trim())) {
-      // Check if email is valid using regex
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Validation Error'),
-            content: const Text('Please enter a valid email address.'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-      return false;
-    } else if (userPass.text.length < 5) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Validation Error'),
-            content: const Text('Password must be at least 5 characters long.'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-      return false;
-    }
-
-    return true;
-  }
-
+  final UserController userController = locator.get<UserController>();
 
   // Method to handle sign-in
   Future<void> _signIn() async {
-    if (!_validateInputs()) {
+    String? errorMessage = HelperFunctions.validateInputs(userEmail, userPass);
+
+    if (errorMessage != null) {
+      // Show error message returned from validation function
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('SignIn Failed'),
+            content: Text(errorMessage),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
       return; // Don't proceed with sign-in if inputs are not valid
     }
     try {
       // Call the sign-in method from AuthService
-      await _authService.signInWithEmailAndPassword(userEmail.text, userPass.text);
+      await userController.signInWithEmailAndPassword(userEmail.text, userPass.text);
       // Navigate to HomeScreen upon successful sign-in
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
     } catch (error) {
       // Display an error dialog if sign-in fails
       showDialog(
@@ -119,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: blackBG,
+      backgroundColor: Colors.grey[700],
       body: Padding(
         padding: const EdgeInsets.only(top: 50.0),
         child: SingleChildScrollView(
@@ -133,31 +96,36 @@ class _LoginPageState extends State<LoginPage> {
               const SpaceVH(height: 10.0),
               const Text(
                 'Please sign in to your account',
-                style: headline3,
+                style: TextStyle(color: Colors.black),
               ),
               const SpaceVH(height: 60.0),
               textFild(
                 controller: userEmail,
                 image: 'user.svg',
                 hintTxt: 'Email',
-
               ),
-              textFild(
+              PasswordTextField(
                 controller: userPass,
-                image: 'hide.svg',
-                isObs: true,
                 hintTxt: 'Password',
               ),
               const SpaceVH(height: 10.0),
               Align(
-                alignment: Alignment.centerRight,
+                alignment: Alignment.center,
                 child: Padding(
                   padding: const EdgeInsets.only(right: 20.0),
                   child: TextButton(
-                    onPressed: () {},
-                    child: const Text(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
+                      );
+                    },
+                    child: Text(
                       'Forgot Password?',
-                      style: headline3,
+                      style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          color: Colors.black.withOpacity(0.6),
+                      ),
                     ),
                   ),
                 ),
@@ -170,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                     Mainbutton(
                       onTap: _signIn, // Call _signIn method when button is tapped
                       text: 'Sign in',
-                      btnColor: blueButton,
+                      btnColor: black,
                     ),
                     const SpaceVH(height: 20.0),
                     Mainbutton(
@@ -183,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                     const SpaceVH(height: 20.0),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (builder) => const SignUpPage()),
                         );
@@ -200,6 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                             text: ' Sign Up',
                             style: headlineDot.copyWith(
                               fontSize: 14.0,
+                              color: Colors.black,
                             ),
                           ),
                         ]),

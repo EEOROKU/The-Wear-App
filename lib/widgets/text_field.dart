@@ -18,14 +18,14 @@ Widget textFild({
       vertical: 10.0,
     ),
     decoration: BoxDecoration(
-      color: blackTextFild,
+      color: Colors.grey,
       borderRadius: BorderRadius.circular(20.0),
     ),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         SizedBox(
-          width: 270.0,
+          width: 200.0,
           child: TextField(
             textAlignVertical: TextAlignVertical.center,
             obscureText: isObs,

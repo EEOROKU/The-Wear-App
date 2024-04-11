@@ -1,11 +1,15 @@
+import 'package:closet_app/helper/helper_function.dart';
+import 'package:closet_app/locator.dart';
+import 'package:closet_app/view_controller/user_controller.dart';
+
 import 'package:flutter/material.dart';
 import 'package:closet_app/widgets/widgets.dart';
 import 'package:closet_app/utils/constants.dart';
-import "package:closet_app/services/fire_auth.dart"; // Import the AuthService
+// Import the AuthService
 import 'package:closet_app/screens/screens.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+  const SignUpPage({super.key});
 
   @override
   _SignUpPageState createState() => _SignUpPageState();
@@ -18,17 +22,43 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController userPass = TextEditingController();
   TextEditingController userEmail = TextEditingController();
 
-  final AuthService _authService = AuthService(); // Initialize the AuthService
+  final UserController userController = locator.get<UserController>();
+
+
 
   Future<void> _signUp() async {
+    String? errorMessage = HelperFunctions.validateInputs(userEmail, userPass);
 
+    if (errorMessage != null) {
+      // Show error message returned from validation function
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('SignUp Failed'),
+            content: Text(errorMessage),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return; // Don't proceed with sign-in if inputs are not valid
+    }
     if (_formKey.currentState!.validate()) {
       try {
-        await _authService.signUpWithEmailAndPassword(
+        await userController.signUpWithEmailAndPassword(
             userEmail.text, userPass.text, userName.text);
         // SignUp successful, navigate to HomeScreen or another page
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
       } catch (error) {
         // SignUp failed, show error message
         showDialog(
@@ -55,7 +85,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: blackBG,
+      backgroundColor: Colors.grey[700],
       body: Padding(
         padding: const EdgeInsets.only(top: 50.0),
         child: SingleChildScrollView(
@@ -71,9 +101,10 @@ class _SignUpPageState extends State<SignUpPage> {
                 const SpaceVH(height: 10.0),
                 const Text(
                   'Please fill in the form to continue',
-                  style: headline3,
+                  style: TextStyle(color: Colors.black),
                 ),
                 const SpaceVH(height: 60.0),
+
                 textFild(
                   controller: userName,
                   image: 'user.svg',
@@ -87,23 +118,23 @@ class _SignUpPageState extends State<SignUpPage> {
                   hintTxt: 'Email Address',
 
                 ),
-                textFild(
+                PasswordTextField(
                   controller: userPass,
-                  isObs: true,
-                  image: 'hide.svg',
                   hintTxt: 'Password',
-
                 ),
                 const SpaceVH(height: 80.0),
                 Mainbutton(
                   onTap: _signUp, // Call _signUp method when button is tapped
                   text: 'Sign Up',
-                  btnColor: blueButton,
+                  btnColor: black,
                 ),
                 const SpaceVH(height: 20.0),
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) =>  const LoginPage()),
+                    );
                   },
                   child: RichText(
                     text: TextSpan(children: [
@@ -117,6 +148,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         text: ' Sign In',
                         style: headlineDot.copyWith(
                           fontSize: 14.0,
+                          color: Colors.black
                         ),
                       ),
                     ]),
