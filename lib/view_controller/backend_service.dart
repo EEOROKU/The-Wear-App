@@ -85,30 +85,32 @@ class BackendService {
 
 
 // Method to fetch all clothing items
+  // Method to fetch all clothing items
   Future<dynamic> getAllClothes() async {
     // Get the current user's data
-    UserModel? userModel =  locator.get<UserController>().currentUser;
+    UserModel? userModel = await getCurrentUserData();
 
     // Return an empty list if user model is null or clothes map is null
-    if (userModel.clothes == null) {
+    if (userModel?.clothes == null) {
       return [];
     }
 
     // Combine all clothing items from different categories
-    return userModel.clothes!.values.expand((list) => list).toList();
+    return userModel!.clothes!.values.expand((list) => list).toList();
   }
 
-  // Method to fetch clothing items by a specific category
+// Method to fetch clothing items by a specific category
   Future<List<ClothingItemModel>> getClothesByCategory(String category) async {
     // Get the current user's data
-    UserModel? userModel =  locator.get<UserController>().currentUser;
+    UserModel? userModel = await getCurrentUserData();
 
     // Return an empty list if user model is null or clothes map is null
-    if (userModel.clothes == null) {
+    if (userModel?.clothes == null) {
       return [];
     }
 
     // Return clothing items of the specified category
-    return userModel.clothes![category] ?? [];
+    return userModel!.clothes![category] ?? [];
   }
+
 }
