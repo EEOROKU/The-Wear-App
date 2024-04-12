@@ -5,7 +5,8 @@ class UserModel {
   String? userEmail;
   String? userName;
   String? avatarUrl;
-  Map<String, List<ClothingItemModel>>? clothes;
+
+   Map<String,List<ClothingItemModel>>? clothes;
 
   UserModel(this.uid, {this.userEmail, this.userName, this.avatarUrl, this.clothes});
 

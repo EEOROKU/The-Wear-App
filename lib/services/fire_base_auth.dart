@@ -13,14 +13,11 @@ class AuthService {
   Future<UserModel> signInWithEmailAndPassword(String email, String password) async {
     try {
 
-
       UserCredential credential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
       User? user = credential.user;
-
-
 
       return  await DatabaseService(uid: user!.uid).gettingUserData(user.uid);
     } on FirebaseAuthException catch (e) {
@@ -83,6 +80,17 @@ class AuthService {
   String? getCurrentUserID() {
     return _auth.currentUser?.uid;
   }
+
+  Future<void> resetPassword({required String email}) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      // Password reset email sent successfully
+    } catch (e) {
+      // Handle any errors that occurred during password reset
+      print("Password reset failed: $e");
+    }
+  }
+
 
   Future<void> updatePassword(String password) async {
     var user = _auth.currentUser;
