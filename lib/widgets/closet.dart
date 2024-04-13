@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../screens/CreateOutfit.dart';
+
 class ClosetScreen extends StatelessWidget {
   const ClosetScreen({super.key});
 
@@ -14,24 +16,30 @@ class ClosetScreen extends StatelessWidget {
             SizedBox(
               height: 190,
               width: 190,
-              child: Row(
+              child: Card(child: Row(
                 children: [
                   Column(
                     children: [
-                      Image.network('https://shorturl.at/gyEJ5', height: 190/2, width: 190/2,),
-                      Image.network('https://shorturl.at/gyEJ5', height: 190/2, width: 190/2,),
+                      Image.network('https://shorturl.at/hiNZ9', height: 180/2, width: 180/2,),
+                      Image.network('https://shorturl.at/hiNZ9', height: 180/2, width: 180/2,),
                     ],
                   ),
                   Column(
                     children: [
-                      Image.network('https://shorturl.at/gyEJ5', height: 190/2, width: 190/2,),
-                      Image.network('https://shorturl.at/gyEJ5', height: 190/2, width: 190/2,),
+                      Image.network('https://shorturl.at/hiNZ9', height: 180/2, width: 180/2,),
+                      Image.network('https://shorturl.at/hiNZ9', height: 180/2, width: 180/2,),
                     ],
                   ),
                 ],
               ),
+
+              ),
             ),
-            const SizedBox(
+            GestureDetector(
+              onTap: (){
+                Navigator.push(context,MaterialPageRoute(builder: (context)=> CreateOutfit()),);
+              },
+              child: const SizedBox(
               height: 190,
               width: 190,
               child: Card(
@@ -43,11 +51,13 @@ class ClosetScreen extends StatelessWidget {
                       Icons.door_sliding_outlined,
                       size: 90.0,
                     ),
-                    Text('Create a closet'),
+                    Text('Create an outfit'),
                   ],
                 ),
               ),
             ),
+            ),
+
           ],
         ),
         const Row(

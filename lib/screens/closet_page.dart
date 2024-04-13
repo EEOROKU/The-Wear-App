@@ -6,6 +6,7 @@ import 'package:closet_app/model/model.dart';
 import 'package:closet_app/screens/screens.dart';
 import 'package:closet_app/screens/Auth/change_password.dart';
 
+import 'CreateOutfit.dart';
 import '../model/cloth_item.dart';
 import '../view_controller/backend_service.dart';
 import 'Item_screens/add_item.dart';
@@ -55,6 +56,7 @@ class _ClosetPageState extends State<ClosetPage> {
     userModel = locator.get<UserController>().currentUser;
     setState(() {});
   }
+
   void _onItemTapped(int index) {
     setState(() {
       _screenIndex = index;
@@ -66,6 +68,7 @@ class _ClosetPageState extends State<ClosetPage> {
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const LandingPage()));
   }
+
   bool _isAddPopupVisible = false;
 
   void _toggleAddPopupVisibility() {
@@ -73,6 +76,7 @@ class _ClosetPageState extends State<ClosetPage> {
       _isAddPopupVisible = !_isAddPopupVisible;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -224,7 +228,7 @@ class _ClosetPageState extends State<ClosetPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // Handle Create Idea tap
+                        Navigator.push(context,MaterialPageRoute(builder: (context)=> CreateOutfit()),);
                       },
                       child: const Padding(
                         padding: EdgeInsets.all(12.0),

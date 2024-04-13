@@ -11,6 +11,7 @@ import 'package:closet_app/screens/screens.dart';
 import '../widgets/closet.dart';
 import '../widgets/outfit.dart';
 import 'Auth/change_password.dart';
+import 'CreateOutfit.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -333,7 +334,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // Handle Create Idea tap
+                        Navigator.push(context,MaterialPageRoute(builder: (context)=> CreateOutfit()),);
                       },
                       child: const Padding(
                         padding: EdgeInsets.all(12.0),
