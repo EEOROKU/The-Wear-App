@@ -45,6 +45,13 @@ dependencies:
   firebase_messaging_platform_interface:
   firebase_analytics_platform_interface:
 
+  image_picker: ^1.0.7
+  firebase_storage: ^11.6.9
+  get_it: ^7.6.7
+
+  provider: ^6.1.2
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
