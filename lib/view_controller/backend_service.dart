@@ -7,7 +7,6 @@ import 'package:closet_app/services/database_service.dart';
 import 'package:closet_app/services/fire_base_auth.dart';
 import 'package:closet_app/services/storage_repo.dart';
 import 'package:closet_app/view_controller/user_controller.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 
 class BackendService {
@@ -33,12 +32,12 @@ class BackendService {
   // Initialize the DatabaseService
 
   // Method to sign up a user with email and password
-  Future<Future<User?>> signUpWithEmailAndPassword(String email, String password, String userName) async {
+  Future<UserModel?> signUpWithEmailAndPassword(String email, String password, String userName) async {
     return authService.signUpWithEmailAndPassword(email, password, userName);
   }
 
   // Method to sign in a user with email and password
-  Future<User?> signInWithEmailAndPassword(String email, String password) async {
+  Future<UserModel?> signInWithEmailAndPassword(String email, String password) async {
     return await authService.signInWithEmailAndPassword(email, password);
   }
 
