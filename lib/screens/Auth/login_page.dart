@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:closet_app/widgets/widgets.dart';
 import 'package:closet_app/utils/constants.dart';
@@ -16,13 +18,55 @@ class _LoginPageState extends State<LoginPage> {
 
   TextEditingController userEmail = TextEditingController();
   TextEditingController userPass = TextEditingController();
+  final AuthService _authService ;//= AuthService(); // Initialize the AuthService
 
-  final AuthService _authService = AuthService(); // Initialize the AuthService
+  _LoginPageState()
+  : _authService = AuthService();
 
+  Future<void> _forgotPassword() async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: userEmail.text);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Password Reset Email Sent'),
+            content: const Text('Please check your email to reset your password.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } catch (error) {
+      if (kDebugMode) {
+        print("Error : $error");
+      }
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text(error.toString()),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
-
-
-  // Method to handle sign-in
   Future<void> _signIn() async {
     String? errorMessage = HelperFunctions.validateInputs(userEmail, userPass);
 
@@ -110,7 +154,9 @@ class _LoginPageState extends State<LoginPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 20.0),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _forgotPassword();
+                    },
                     child: const Text(
                       'Forgot Password?',
                       style: headline3,

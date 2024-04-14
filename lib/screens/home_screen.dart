@@ -1,14 +1,13 @@
 import 'package:closet_app/helper/helper_function.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:closet_app/model/model.dart';
 import 'package:closet_app/screens/screens.dart';
 
 import '../services/fire_auth.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final AuthService? authService;
+
+  const HomeScreen({super.key, this.authService});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -17,16 +16,23 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String userName = "";
   String email = "";
-  final AuthService authService = AuthService();
-
-  User? user = FirebaseAuth.instance.currentUser;
-
+  late AuthService authService; // Declaring AuthService as late
 
   @override
   void initState() {
     super.initState();
+    authService = widget.authService ?? AuthService(); // Using default AuthService if not provided
     gettingUserData();
   }
+
+
+  Future<void> logout(BuildContext context) async {
+    authService.signOut();
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const LandingPage()),
+    );
+  }
+
   gettingUserData() async {
     await HelperFunctions.getUserEmailFromSF().then((value) {
       setState(() {
@@ -44,20 +50,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return const MaterialApp(
       home: HomePages(),
+      debugShowCheckedModeBanner: false,
     );
   }
-  
-
-Future<void> logout(BuildContext context) async {
-
-  authService.signOut();
-  Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const LandingPage()));
-}
 }
 
 class HomePages extends StatefulWidget {
-  const HomePages({Key? key}) : super(key: key);
+  const HomePages({super.key});
 
   @override
   State<HomePages> createState() => _HomePageState();
@@ -67,12 +66,12 @@ class _HomePageState extends State<HomePages> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static  List<Widget> _widgetOptions = <Widget>[
+  static  final List<Widget> _widgetOptions = <Widget>[
     Column(children: [
-      Row(
+      const Row(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: CircleAvatar(
               radius: 40,
               backgroundImage: NetworkImage(
@@ -91,10 +90,10 @@ class _HomePageState extends State<HomePages> {
           ]),
         ],
       ),
-      Row(
+      const Row(
         children: [Icon(Icons.location_pin), Text('Charlottetown'), Text('                                         OOTD calendar>',style: TextStyle(color: Colors.blue),)],
       ),
-      Row(
+      const Row(
         children: [
           SizedBox(
               width: 350,  // Set the width as per your requirement
@@ -130,12 +129,12 @@ class _HomePageState extends State<HomePages> {
               // Handle button press
             },
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 border: Border(
                   bottom: BorderSide(width: 1.0, color: Colors.black),
                 ),
               ),
-              child: Padding(
+              child: const Padding(
                 padding: EdgeInsets.all(10.0),
                 child: Text('Closet'),
               ),
@@ -149,12 +148,12 @@ class _HomePageState extends State<HomePages> {
               // Handle button press
             },
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 border: Border(
                   bottom: BorderSide(width: 1.0, color: Colors.black),
                 ),
               ),
-              child: Padding(
+              child: const Padding(
                 padding: EdgeInsets.all(10.0),
                 child: Text('Outfit'),
               ),
@@ -165,29 +164,29 @@ class _HomePageState extends State<HomePages> {
         children: [
           SizedBox( height:190,width: 190,child: Row(children: [Column(children: [Image.network('https://shorturl.at/gyEJ5',height: 190/2,width: 190/2,),Image.network('https://shorturl.at/gyEJ5',height: 190/2,width: 190/2,)]),
             Column(children: [Image.network('https://shorturl.at/gyEJ5',height: 190/2,width: 190/2,),Image.network('https://shorturl.at/gyEJ5',height: 190/2,width: 190/2,)])],),),
-          SizedBox(height:190,width: 190, child: Card(color: Colors.white,child: Column(mainAxisAlignment: MainAxisAlignment.center,children: [Icon(Icons.door_sliding_outlined, size: 90.0,),Text('Create a closet')],),),)
+          const SizedBox(height:190,width: 190, child: Card(color: Colors.white,child: Column(mainAxisAlignment: MainAxisAlignment.center,children: [Icon(Icons.door_sliding_outlined, size: 90.0,),Text('Create a closet')],),),)
         ],
       ),
-      Row(children: [Column(children: [Text('   All clothes'),Text('1')],),],),
+      const Row(children: [Column(children: [Text('   All clothes'),Text('1')],),],),
       Row(mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ElevatedButton(
             onPressed: (){},
-            child: Row(children: [Icon(Icons.archive_outlined,color: Colors.black,),Text('Archive', style: TextStyle(color: Colors.black),),],),
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(Colors.grey),
             ),
+            child: const Row(children: [Icon(Icons.archive_outlined,color: Colors.black,),Text('Archive', style: TextStyle(color: Colors.black),),],),
           ),
         ],
       )
 
     ]),
-    Text(
+    const Text(
       'Add',
       style: optionStyle,
     ),
 
-    Column(children: [
+    const Column(children: [
       Text('Closet',style: optionStyle,),
       Row(
         children: <Widget>[
@@ -235,14 +234,14 @@ class _HomePageState extends State<HomePages> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: PopupMenuButton<String>(
               color: Colors.grey[300],
-              icon: Icon(Icons.border_all_outlined),
+              icon: const Icon(Icons.border_all_outlined),
               itemBuilder: (BuildContext context) =>
               <PopupMenuEntry<String>>[
                 const PopupMenuItem<String>(
@@ -261,7 +260,7 @@ class _HomePageState extends State<HomePages> {
             ),
             label: 'Add',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.boy_sharp),
             label: 'Closet',
           ),

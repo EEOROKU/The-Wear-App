@@ -4,7 +4,7 @@ import 'package:closet_app/widgets/widgets.dart';
 import 'package:closet_app/utils/constants.dart';
 
 class LandingPage extends StatefulWidget {
-  const LandingPage({Key? key}) : super(key: key);
+  const LandingPage({super.key});
 
   @override
   _LandingPageState createState() => _LandingPageState();
@@ -47,10 +47,10 @@ class _LandingPageState extends State<LandingPage> {
                 style: headline.copyWith(fontSize: 30.0),
               ),
             ),
-            SizedBox(height: 15.0),
+            const SizedBox(height: 15.0),
             Expanded(
               child: Center(
-                child: Container(
+                child: SizedBox(
                   width: width * 0.9, // 90% of the screen width
                   child: AspectRatio(
                     aspectRatio: 10 / 15, // Custom aspect ratio
@@ -62,7 +62,7 @@ class _LandingPageState extends State<LandingPage> {
                 ),
               ),
             ),
-            SizedBox(height: 20.0), // Adjusted SizedBox height
+            const SizedBox(height: 20.0), // Adjusted SizedBox height
             Padding(
               padding: const EdgeInsets.only(top: 0),
               child: Column(
@@ -71,22 +71,25 @@ class _LandingPageState extends State<LandingPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (builder) => const SignUpPage()),
+                        MaterialPageRoute(builder: (builder) => const LoginPage()),
                       );
                     },
                     btnColor: blueButton,
                     text: 'Get Started',
                   ),
-                   const SpaceVH(height: 20.0),
-                   TextButton(
-                     onPressed: () {
-                       Navigator.push(context, MaterialPageRoute(builder: (builder) => const SignUpPage()),);},
 
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>  const LoginPage()),
+                      );
+                    },
                     child: TextButton(
-                      onPressed: ()  {
+                      onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) =>  LoginPage()),
+                          MaterialPageRoute(builder: (context) =>  const LoginPage()),
                         );
                       },
                       child: RichText(
@@ -106,7 +109,7 @@ class _LandingPageState extends State<LandingPage> {
                         ]),
                       ),
                     ),
-      ),
+                  ),
                 ],
               ),
             ),
