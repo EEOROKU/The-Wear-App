@@ -39,7 +39,6 @@ dependencies:
   cloud_firestore:
   mockito:
   firebase_auth_mocks:
-  provider:
   firebase_messaging:
   firebase_analytics:
   firebase_messaging_platform_interface:
